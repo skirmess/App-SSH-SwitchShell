@@ -77,7 +77,7 @@ home directory and add the B<sshss> script to this directory. Add the
 following command string in front of your ssh key in the
 F<~/.ssh/authorized_keys> file:
 
-  command="/home/admin/.ryah/.ssh/sshss /usr/bin/ksh93"
+  command=".ryah/.ssh/sshss /usr/bin/ksh93"
 
 When you login over ssh with your key to the admin account,
 
@@ -87,9 +87,11 @@ When you login over ssh with your key to the admin account,
 
 =item * the SHELL environment variable will be set to F</usr/bin/ksh93>
 
-=item * the HOME environment varianle will be set to F</home/admin/.ryah>
+=item * the HOME environment variable will be set to F</home/admin/.ryah>
+(The shared accounts home directory is /home/admin in this example)
 
 =item * the working directory will be F</home/admin/.ryah>
+(The shared accounts home directory is /home/admin in this example)
 
 =back
 
@@ -102,7 +104,7 @@ inside a F<.ssh> directory outside of the current home directory.
 Add the following command string in front of your ssh key in the
 F<~/.ssh/authorized_keys> file:
 
-  command="/home/admin/.ssh/sshss /usr/bin/ksh93"
+  command=".ssh/sshss /usr/bin/ksh93"
 
 When you login over ssh with your key to the admin account,
 
@@ -122,7 +124,7 @@ home directory and add the B<sshss> script to this directory. Add the
 following command string in front of your ssh key in the
 F<~/.ssh/authorized_keys> file:
 
-  command="/home/admin/.ryah/.ssh/sshss"
+  command=".ryah/.ssh/sshss"
 
 When you login over ssh with your key to the admin account,
 
@@ -136,9 +138,11 @@ invalid, F</bin/sh> is used instead.
 passwd database. If the shell specified in the passwd database is empty or
 invalid, the SHELL environment variable is set to F</bin/sh> instead.
 
-=item * the HOME environment varianle will be set to F</home/admin/.ryah>
+=item * the HOME environment variable will be set to F</home/admin/.ryah>
+(The shared accounts home directory is /home/admin in this example)
 
 =item * the working directory will be F</home/admin/.ryah>
+(The shared accounts home directory is /home/admin in this example)
 
 =back
 
