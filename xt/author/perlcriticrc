@@ -1,0 +1,26 @@
+severity = 1
+
+[CodeLayout::RequireTidyCode]
+perltidyrc = ../../.perltidyrc
+
+[-Documentation::RequirePodSections]
+
+[InputOutput::RequireCheckedSyscalls]
+exclude_functions = print
+
+[-Modules::ProhibitMultiplePackages]
+
+# Broken, compalins on .t files
+# https://rt.cpan.org/Public/Bug/Display.html?id=84135
+[-Modules::RequireVersionVar]
+
+[-Subroutines::ProhibitSubroutinePrototypes]
+
+[-ValuesAndExpressions::ProhibitMagicNumbers]
+
+[Variables::RequireLocalizedPunctuationVars]
+allow = %ENV
+
+##[-Subroutines::RequireArgUnpacking]
+
+# vim: ts=4 sts=4 sw=4 et: syntax=perl

@@ -1,0 +1,6 @@
+*.bak
+*~
+.*.swp
+.build
+App-SSH-SwitchShell-*
+tmp
