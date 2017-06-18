@@ -168,6 +168,9 @@ you run a command directly over SSH, including L<scp(1)|scp(1)> and L<rsync(1)|r
 This is the default used by SSH itself. If your shell would work with plain
 SSH, it should also work with B<sshss>.
 
+B<sshss> tries to behave as much as possible like the C<do_child> function
+from F<session.c> from OpenSSH portable.
+
 =head1 OPTIONS
 
 =over
