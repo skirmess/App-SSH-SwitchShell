@@ -38,6 +38,8 @@ SSH, it should also work with B<sshss>.
 B<sshss> tries to behave as much as possible like the C<do_child> function
 from F<session.c> from OpenSSH portable.
 
+B<sshss> uses no non-core modules.
+
 =head1 OPTIONS
 
 =over
