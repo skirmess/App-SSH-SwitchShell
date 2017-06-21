@@ -1,8 +1,5 @@
 severity = 1
 
-[CodeLayout::RequireTidyCode]
-perltidyrc = ../../.perltidyrc
-
 [-Documentation::RequirePodSections]
 
 [InputOutput::RequireCheckedSyscalls]
