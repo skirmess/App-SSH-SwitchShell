@@ -1,5 +1,7 @@
 severity = 1
 
+[-BuiltinFunctions::ProhibitUselessTopic]
+
 [-Documentation::RequirePodSections]
 
 [InputOutput::RequireCheckedSyscalls]
