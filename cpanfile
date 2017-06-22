@@ -13,6 +13,7 @@ on 'test' => sub {
   requires "Test::More" => "0";
   requires "Test::TempDir::Tiny" => "0";
   requires "autodie" => "0";
+  requires "perl" => "5.006";
   requires "subs" => "0";
 };
 
@@ -22,6 +23,7 @@ on 'test' => sub {
 
 on 'configure' => sub {
   requires "ExtUtils::MakeMaker" => "0";
+  requires "perl" => "5.006";
 };
 
 on 'develop' => sub {
@@ -43,6 +45,7 @@ on 'develop' => sub {
   requires "Dist::Zilla::Plugin::MetaProvides::Package" => "0";
   requires "Dist::Zilla::Plugin::MetaTests" => "0";
   requires "Dist::Zilla::Plugin::MetaYAML" => "0";
+  requires "Dist::Zilla::Plugin::MinimumPerl" => "0";
   requires "Dist::Zilla::Plugin::NextRelease" => "0";
   requires "Dist::Zilla::Plugin::OnlyCorePrereqs" => "0";
   requires "Dist::Zilla::Plugin::Pod2Readme" => "0";
