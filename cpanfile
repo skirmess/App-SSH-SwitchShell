@@ -29,5 +29,6 @@ on 'develop' => sub {
   requires "Test::MinimumVersion" => "0";
   requires "Test::More" => "0";
   requires "Test::Perl::Critic" => "0";
+  requires "Test::Version" => "1";
   requires "autodie" => "0";
 };

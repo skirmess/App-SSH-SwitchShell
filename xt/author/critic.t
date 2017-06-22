@@ -12,6 +12,7 @@ use Test::Perl::Critic;
 
 my %files_to_not_criticize = (
     't/00-report-prereqs.t'        => 1,
+    'xt/author/test-version.t'     => 1,
     'xt/release/minimum-version.t' => 1,
 );
 
