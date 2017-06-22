@@ -48,6 +48,7 @@ on 'develop' => sub {
   requires "Dist::Zilla::Plugin::PruneCruft" => "0";
   requires "Dist::Zilla::Plugin::ReadmeAnyFromPod" => "0";
   requires "Dist::Zilla::Plugin::RunExtraTests" => "0";
+  requires "Dist::Zilla::Plugin::ShareDir" => "0";
   requires "Dist::Zilla::Plugin::Test::MinimumVersion" => "0";
   requires "Dist::Zilla::Plugin::Test::ReportPrereqs" => "0";
   requires "Dist::Zilla::Plugin::Test::Version" => "0";
