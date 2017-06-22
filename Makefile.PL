@@ -28,6 +28,8 @@ my %WriteMakefileArgs = (
   },
   "TEST_REQUIRES" => {
     "Capture::Tiny" => 0,
+    "ExtUtils::MakeMaker" => 0,
+    "File::Spec" => 0,
     "Test::MockModule" => 0,
     "Test::More" => 0,
     "Test::TempDir::Tiny" => 0,
@@ -45,6 +47,7 @@ my %FallbackPrereqs = (
   "Capture::Tiny" => 0,
   "Cwd" => 0,
   "English" => 0,
+  "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,
   "Test::MockModule" => 0,
   "Test::More" => 0,
