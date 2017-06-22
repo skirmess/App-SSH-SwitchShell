@@ -52,6 +52,7 @@ on 'develop' => sub {
   requires "Dist::Zilla::Plugin::RunExtraTests" => "0";
   requires "Dist::Zilla::Plugin::ShareDir" => "0";
   requires "Dist::Zilla::Plugin::Test::MinimumVersion" => "0";
+  requires "Dist::Zilla::Plugin::Test::Portability" => "0";
   requires "Dist::Zilla::Plugin::Test::ReportPrereqs" => "0";
   requires "Dist::Zilla::Plugin::Test::Version" => "0";
   requires "Dist::Zilla::Plugin::TestRelease" => "0";
@@ -63,6 +64,7 @@ on 'develop' => sub {
   requires "Test::More" => "0";
   requires "Test::Perl::Critic" => "0";
   requires "Test::Pod" => "1.41";
+  requires "Test::Portability::Files" => "0";
   requires "Test::Version" => "1";
   requires "autodie" => "0";
 };
