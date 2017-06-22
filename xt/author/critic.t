@@ -10,7 +10,9 @@ use File::Spec;
 use Test::More;
 use Test::Perl::Critic;
 
-my %files_to_not_criticize;
+my %files_to_not_criticize = (
+    'xt/release/minimum-version.t' => 1,
+);
 
 sub _get_all_files {
     my ($dir) = @_;
