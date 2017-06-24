@@ -54,6 +54,7 @@ on 'develop' => sub {
   requires "Dist::Zilla::Plugin::Pod2Readme" => "0";
   requires "Dist::Zilla::Plugin::PodSyntaxTests" => "0";
   requires "Dist::Zilla::Plugin::Prereqs::AuthorDeps" => "0";
+  requires "Dist::Zilla::Plugin::PromptIfStale" => "0";
   requires "Dist::Zilla::Plugin::PruneCruft" => "0";
   requires "Dist::Zilla::Plugin::ReadmeAnyFromPod" => "0";
   requires "Dist::Zilla::Plugin::RewriteVersion" => "0";
