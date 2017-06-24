@@ -155,12 +155,12 @@ shared account and lets you define a different directory as your home
 directory. You are most likely going to use a subdirectory of the shared
 accounts home directory.
 
-Both features, the personal home direcroy and the shell change, can be used
+Both features, the personal home directory and the shell change, can be used
 independently without using the other.
 
 If you specify a new shell the shell is not only used as the interactive
 shell but also if you directly run a command. This includes commands that
-run over ssh like L<scp(1)|scp(1)> and L<rsync(1)|rsync(1)>. It's your
+run over SSH like L<scp(1)|scp(1)> and L<rsync(1)|rsync(1)>. It's your
 responsibility to not use an overly obscure shell that breaks these commands.
 
 The used shell must support the I<-c> flag to run a command, which is used if
@@ -197,7 +197,7 @@ shell for the account from the passwd database.
 =head1 EXIT STATUS
 
 B<sshss> exits 1 if an error occurs until it can exec the shell. After
-the exec the exit status depends on the executed shell or the comnnad run in
+the exec the exit status depends on the executed shell or the command run in
 this shell.
 
 =head1 EXAMPLES
@@ -205,14 +205,14 @@ this shell.
 =head2 B<Example 1> Change the shell to ksh93 and use a custom home directory
 
 Create a directory to contain your own home directory. We create the
-directory ~/.ryah in this example. Create a .ssh directory in your new custom
+directory ~/.ryah in this example. Create a F<.ssh> directory in your new custom
 home directory and add the B<sshss> script to this directory. Add the
-following command string in front of your ssh key in the
+following command string in front of your SSH key in the
 F<~/.ssh/authorized_keys> file:
 
   command=".ryah/.ssh/sshss /usr/bin/ksh93"
 
-When you login over ssh with your key to the admin account,
+When you login over SSH with your key to the admin account,
 
 =over
 
@@ -234,12 +234,12 @@ Add the B<sshss> script to e.g. the F<~/.ssh> directory or any other
 directory. B<sshss> only changes the home directory if it is run from
 inside a F<.ssh> directory outside of the current home directory.
 
-Add the following command string in front of your ssh key in the
+Add the following command string in front of your SSH key in the
 F<~/.ssh/authorized_keys> file:
 
   command=".ssh/sshss /usr/bin/ksh93"
 
-When you login over ssh with your key to the admin account,
+When you login over SSH with your key to the admin account,
 
 =over
 
@@ -252,14 +252,14 @@ When you login over ssh with your key to the admin account,
 =head2 B<Example 3> Use a custom home directory
 
 Create a directory to contain your own home directory. We create the
-directory ~/.ryah in this example. Create a .ssh directory in your new custom
+directory ~/.ryah in this example. Create a F<.ssh> directory in your new custom
 home directory and add the B<sshss> script to this directory. Add the
-following command string in front of your ssh key in the
+following command string in front of your SSH key in the
 F<~/.ssh/authorized_keys> file:
 
   command=".ryah/.ssh/sshss"
 
-When you login over ssh with your key to the admin account,
+When you login over SSH with your key to the admin account,
 
 =over
 
