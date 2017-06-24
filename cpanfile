@@ -35,6 +35,7 @@ on 'develop' => sub {
   requires "Dist::Zilla::Plugin::ConfirmRelease" => "0";
   requires "Dist::Zilla::Plugin::CopyFilesFromBuild" => "0";
   requires "Dist::Zilla::Plugin::ExecDir" => "0";
+  requires "Dist::Zilla::Plugin::Git::Check" => "0";
   requires "Dist::Zilla::Plugin::Git::CheckFor::CorrectBranch" => "0";
   requires "Dist::Zilla::Plugin::Git::GatherDir" => "0";
   requires "Dist::Zilla::Plugin::GithubMeta" => "0";
