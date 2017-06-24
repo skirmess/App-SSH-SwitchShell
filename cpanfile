@@ -37,6 +37,7 @@ on 'develop' => sub {
   requires "Dist::Zilla::Plugin::Git::CheckFor::CorrectBranch" => "0";
   requires "Dist::Zilla::Plugin::Git::GatherDir" => "0";
   requires "Dist::Zilla::Plugin::GithubMeta" => "0";
+  requires "Dist::Zilla::Plugin::InsertCopyright" => "0";
   requires "Dist::Zilla::Plugin::License" => "0";
   requires "Dist::Zilla::Plugin::MakeMaker" => "0";
   requires "Dist::Zilla::Plugin::Manifest" => "0";
