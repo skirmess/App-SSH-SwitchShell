@@ -12,6 +12,7 @@ use Test::Perl::Critic;
 
 my %files_to_not_criticize = (
     't/00-report-prereqs.t'        => 1,
+    'xt/author/pod-spell.t'        => 1,
     'xt/author/pod-syntax.t'       => 1,
     'xt/author/portability.t'      => 1,
     'xt/author/test-version.t'     => 1,
