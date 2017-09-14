@@ -1,0 +1,9 @@
+[InputOutput::RequireCheckedSyscalls]
+exclude_functions = print
+
+[-Subroutines::ProhibitSubroutinePrototypes]
+
+[-ValuesAndExpressions::ProhibitMagicNumbers]
+
+[Variables::RequireLocalizedPunctuationVars]
+allow = %ENV

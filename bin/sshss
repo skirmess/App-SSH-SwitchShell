@@ -1,11 +1,12 @@
 #!/usr/bin/env perl
-package App::SSH::SwitchShell;
 
 use 5.006;
 use strict;
 use warnings;
 
 our $VERSION = '0.001';
+
+package App::SSH::SwitchShell;
 
 use Cwd;
 use English qw(-no_match_vars);
@@ -136,6 +137,8 @@ __END__
 =head1 NAME
 
 sshss - Use your preferred shell and own home directory for shared SSH accounts
+
+=head1 VERSION
 
 =head1 SYNOPSIS
 

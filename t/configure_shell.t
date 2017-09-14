@@ -11,6 +11,8 @@ use Cwd;
 use Test::More;
 use Test::TempDir::Tiny;
 
+## no critic(Modules::ProhibitMultiplePackages)
+
 main();
 
 sub main {
