@@ -7,6 +7,6 @@ use warnings;
 # this test was generated with
 # Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.015
 
-use Test::EOL;
+use Test::CPAN::Changes;
 
-all_perl_files_ok( { trailing_whitespace => 1 }, grep { -d } qw( bin lib t xt) );
+changes_ok();

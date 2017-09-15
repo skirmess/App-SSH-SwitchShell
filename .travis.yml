@@ -1,5 +1,5 @@
 # Automatically generated file
-# Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.014
+# Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.015
 
 language: perl
 perl:
@@ -20,5 +20,3 @@ install:
 script:
   - perl Makefile.PL && make test
   - test -d xt/author && prove -lr xt/author
-  - make manifest
-  - test -d xt/release && prove -lr xt/release
