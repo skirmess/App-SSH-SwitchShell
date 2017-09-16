@@ -327,11 +327,6 @@
             "version" : "0.003"
          },
          {
-            "class" : "Dist::Zilla::Plugin::SetScriptShebang",
-            "name" : "@Author::SKIRMESS/SetScriptShebang",
-            "version" : "0.01"
-         },
-         {
             "class" : "Dist::Zilla::Plugin::Authority",
             "name" : "@Author::SKIRMESS/Authority",
             "version" : "1.009"
