@@ -63,7 +63,7 @@ x_BuiltWith:
     Test::EOL: '2.00'
     Test::Kwalitee: '1.26'
     Test::MinimumVersion: '0.101082'
-    Test::MockModule: '0.11'
+    Test::MockModule: '0.12'
     Test::Mojibake: '1.3'
     Test::More: '1.302096'
     Test::NoTabs: '2.00'
@@ -165,11 +165,11 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase
       name: '@Author::SKIRMESS/Author::SKIRMESS::RepositoryBase'
-      version: '0.015'
+      version: '0.016'
     -
       class: Dist::Zilla::Plugin::Author::SKIRMESS::InsertVersion
       name: '@Author::SKIRMESS/Author::SKIRMESS::InsertVersion'
-      version: '0.015'
+      version: '0.016'
     -
       class: Dist::Zilla::Plugin::NextRelease
       name: '@Author::SKIRMESS/NextRelease'

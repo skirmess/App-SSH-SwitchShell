@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 # this test was generated with
-# Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.015
+# Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.016
 
 use Test::More 0.88;
 use Test::Kwalitee 'kwalitee_ok';

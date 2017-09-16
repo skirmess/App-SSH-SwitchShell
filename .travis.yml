@@ -1,5 +1,5 @@
 # Automatically generated file
-# Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.015
+# Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.016
 
 language: perl
 perl:
