@@ -2,6 +2,10 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - Added package App::SSH::SwitchShell from bin/sshss to provides section
+    of META.* files
+
 0.001  2017-09-16 14:07:50 UTC
+
  - Initial release
 

@@ -26,7 +26,10 @@ no_index:
     - examples
     - t
     - xt
-provides: {}
+provides:
+  App::SSH::SwitchShell:
+    file: bin/sshss
+    version: '0.001'
 requires:
   Cwd: '0'
   English: '0'
@@ -165,11 +168,11 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase
       name: '@Author::SKIRMESS/Author::SKIRMESS::RepositoryBase'
-      version: '0.016'
+      version: '0.017'
     -
       class: Dist::Zilla::Plugin::Author::SKIRMESS::InsertVersion
       name: '@Author::SKIRMESS/Author::SKIRMESS::InsertVersion'
-      version: '0.016'
+      version: '0.017'
     -
       class: Dist::Zilla::Plugin::NextRelease
       name: '@Author::SKIRMESS/NextRelease'
@@ -276,6 +279,28 @@ x_Dist_Zilla:
           Module::Metadata: '1.000031'
           version: '0.004'
       name: '@Author::SKIRMESS/MetaProvides::Package'
+      version: '2.004003'
+    -
+      class: Dist::Zilla::Plugin::MetaProvides::Package
+      config:
+        Dist::Zilla::Plugin::MetaProvides::Package:
+          finder:
+            - ':ExecFiles'
+          finder_objects:
+            -
+              class: Dist::Zilla::Plugin::FinderCode
+              name: ':ExecFiles'
+              version: '6.010'
+          include_underscores: '0'
+        Dist::Zilla::Role::MetaProvider::Provider:
+          $Dist::Zilla::Role::MetaProvider::Provider::VERSION: '2.002004'
+          inherit_missing: '1'
+          inherit_version: '1'
+          meta_noindex: '1'
+        Dist::Zilla::Role::ModuleMetadata:
+          Module::Metadata: '1.000031'
+          version: '0.004'
+      name: '@Author::SKIRMESS/MetaProvides::Package/ExecFiles'
       version: '2.004003'
     -
       class: Dist::Zilla::Plugin::MetaConfig
