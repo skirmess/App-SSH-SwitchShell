@@ -7,6 +7,6 @@ use warnings;
 # this test was generated with
 # Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.020
 
-use Test::CPAN::Meta 0.12;
+use Test::CPAN::Meta;
 
 meta_yaml_ok();

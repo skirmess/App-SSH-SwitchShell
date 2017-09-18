@@ -168,11 +168,11 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase
       name: '@Author::SKIRMESS/Author::SKIRMESS::RepositoryBase'
-      version: '0.017'
+      version: '0.020'
     -
       class: Dist::Zilla::Plugin::Author::SKIRMESS::InsertVersion
       name: '@Author::SKIRMESS/Author::SKIRMESS::InsertVersion'
-      version: '0.017'
+      version: '0.020'
     -
       class: Dist::Zilla::Plugin::NextRelease
       name: '@Author::SKIRMESS/NextRelease'
@@ -205,6 +205,7 @@ x_Dist_Zilla:
             - xt/author/portability.t
             - xt/author/test-version.t
             - xt/release/changes.t
+            - xt/release/distmeta.t
             - xt/release/eol.t
             - xt/release/kwalitee.t
             - xt/release/manifest.t
@@ -449,6 +450,7 @@ x_Dist_Zilla:
           filename: []
           match:
             - .pm$
+            - ^bin/
       name: '@Author::SKIRMESS/CopyFilesFromRelease'
       version: '0.006'
     -
@@ -482,6 +484,7 @@ x_Dist_Zilla:
             - xt/author/portability.t
             - xt/author/test-version.t
             - xt/release/changes.t
+            - xt/release/distmeta.t
             - xt/release/eol.t
             - xt/release/kwalitee.t
             - xt/release/manifest.t

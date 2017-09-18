@@ -248,12 +248,12 @@
          {
             "class" : "Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase",
             "name" : "@Author::SKIRMESS/Author::SKIRMESS::RepositoryBase",
-            "version" : "0.017"
+            "version" : "0.020"
          },
          {
             "class" : "Dist::Zilla::Plugin::Author::SKIRMESS::InsertVersion",
             "name" : "@Author::SKIRMESS/Author::SKIRMESS::InsertVersion",
-            "version" : "0.017"
+            "version" : "0.020"
          },
          {
             "class" : "Dist::Zilla::Plugin::NextRelease",
@@ -289,6 +289,7 @@
                      "xt/author/portability.t",
                      "xt/author/test-version.t",
                      "xt/release/changes.t",
+                     "xt/release/distmeta.t",
                      "xt/release/eol.t",
                      "xt/release/kwalitee.t",
                      "xt/release/manifest.t",
@@ -608,7 +609,8 @@
                "Dist::Zilla::Plugin::CopyFilesFromRelease" : {
                   "filename" : [],
                   "match" : [
-                     ".pm$"
+                     ".pm$",
+                     "^bin/"
                   ]
                }
             },
@@ -647,6 +649,7 @@
                      "xt/author/portability.t",
                      "xt/author/test-version.t",
                      "xt/release/changes.t",
+                     "xt/release/distmeta.t",
                      "xt/release/eol.t",
                      "xt/release/kwalitee.t",
                      "xt/release/manifest.t",
