@@ -50,11 +50,11 @@ sub main {
         mkdir $script_basedir;
 
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
-        is( $result[0], undef,   'configure_home() returns undef' );
-        is( $stdout,    q{},     '... prints nothing to STDOUT' );
-        is( $stderr,    q{},     '... prints nothing to STDERR' );
-        is( $ENV{HOME}, $tmpdir, '... HOME environment variable is correctly set' );
-        is( cwd(),      $tmpdir, '... cwd is correctly changed' );
+        is( $result[0],                     undef,   'configure_home() returns undef' );
+        is( $stdout,                        q{},     '... prints nothing to STDOUT' );
+        is( $stderr,                        q{},     '... prints nothing to STDERR' );
+        is( $ENV{HOME},                     $tmpdir, '... HOME environment variable is correctly set' );
+        is( File::Spec->canonpath( cwd() ), $tmpdir, '... cwd is correctly changed' );
 
         chdir $basedir;
     }
@@ -68,7 +68,7 @@ sub main {
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
         is( $result[0], undef, 'configure_home() returns undef' );
         is( $stdout,    q{},   '... prints nothing to STDOUT' );
-        like( $stderr, qr{^Could not chdir to home '$not_existing_home': }, '... prints that chdir() failed to STDERR' );
+        like( $stderr, qr{^Could not chdir to home '\Q$not_existing_home\E': }, '... prints that chdir() failed to STDERR' );
         is( $ENV{HOME}, $not_existing_home, '... HOME environment variable is correctly set' );
         is( cwd(),      $basedir,           '... cwd is not changed because dir does not exist' );
 
@@ -90,65 +90,69 @@ sub main {
         chdir $basedir;
     }
 
-    note('HOME and script basedir are reached through symlink');
-    {
-        my $homedir = File::Spec->catdir( $tmpdir, 'HOMEDIR' );
-        mkdir $homedir;
+  SKIP: {
+        skip 'The symlink function is unimplemented' if !eval { symlink q{}, q{}; 1 };
 
-        my $homelnk = File::Spec->catfile( $tmpdir, 'HOMELINK' );
-        symlink 'HOMEDIR', $homelnk;
+        note('HOME and script basedir are reached through symlink');
+        {
+            my $homedir = File::Spec->catdir( $tmpdir, 'HOMEDIR' );
+            mkdir $homedir;
 
-        $script_basedir = File::Spec->catdir( $homelnk, 'abc' );
-        mkdir $script_basedir;
-        $script_basedir = File::Spec->catdir( $script_basedir, '.ssh' );
-        mkdir $script_basedir;
+            my $homelnk = File::Spec->catfile( $tmpdir, 'HOMELINK' );
+            symlink 'HOMEDIR', $homelnk;
 
-        local $ENV{HOME} = $homelnk;
+            $script_basedir = File::Spec->catdir( $homelnk, 'abc' );
+            mkdir $script_basedir;
+            $script_basedir = File::Spec->catdir( $script_basedir, '.ssh' );
+            mkdir $script_basedir;
 
-        my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
-        is( $result[0], undef, 'configure_home() returns undef' );
-        is( $stdout,    q{},   '... prints nothing to STDOUT' );
-        is( $stderr,    q{},   '... prints nothing to STDERR' );
-        is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is set correct with symlink' );
-        is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
+            local $ENV{HOME} = $homelnk;
 
-        chdir $basedir;
-    }
+            my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
+            is( $result[0], undef, 'configure_home() returns undef' );
+            is( $stdout,    q{},   '... prints nothing to STDOUT' );
+            is( $stderr,    q{},   '... prints nothing to STDERR' );
+            is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is set correct with symlink' );
+            is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
 
-    note('HOME is reached through symlink, script basedir is not');
-    {
-        my $homedir = File::Spec->catdir( $tmpdir, 'HOMEDIR' );
-        my $homelnk = File::Spec->catfile( $tmpdir, 'HOMELINK' );
+            chdir $basedir;
+        }
 
-        local $ENV{HOME} = $homelnk;
-        $script_basedir = File::Spec->catdir( $homedir, 'abc', '.ssh' );
+        note('HOME is reached through symlink, script basedir is not');
+        {
+            my $homedir = File::Spec->catdir( $tmpdir, 'HOMEDIR' );
+            my $homelnk = File::Spec->catfile( $tmpdir, 'HOMELINK' );
 
-        my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
-        is( $result[0], undef, 'configure_home() returns undef' );
-        is( $stdout,    q{},   '... prints nothing to STDOUT' );
-        is( $stderr,    q{},   '... prints nothing to STDERR' );
-        is( $ENV{HOME}, File::Spec->catdir( $homedir, 'abc' ), '... HOME environment variable is set correct with symlink' );
-        is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
+            local $ENV{HOME} = $homelnk;
+            $script_basedir = File::Spec->catdir( $homedir, 'abc', '.ssh' );
 
-        chdir $basedir;
-    }
+            my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
+            is( $result[0], undef, 'configure_home() returns undef' );
+            is( $stdout,    q{},   '... prints nothing to STDOUT' );
+            is( $stderr,    q{},   '... prints nothing to STDERR' );
+            is( $ENV{HOME}, File::Spec->catdir( $homedir, 'abc' ), '... HOME environment variable is set correct with symlink' );
+            is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
 
-    note('script basedir is reached through symlink, HOME is not');
-    {
-        my $homedir = File::Spec->catdir( $tmpdir, 'HOMEDIR' );
-        my $homelnk = File::Spec->catfile( $tmpdir, 'HOMELINK' );
+            chdir $basedir;
+        }
 
-        local $ENV{HOME} = $homedir;
-        $script_basedir = File::Spec->catdir( $homelnk, 'abc', '.ssh' );
+        note('script basedir is reached through symlink, HOME is not');
+        {
+            my $homedir = File::Spec->catdir( $tmpdir, 'HOMEDIR' );
+            my $homelnk = File::Spec->catfile( $tmpdir, 'HOMELINK' );
 
-        my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
-        is( $result[0], undef, 'configure_home() returns undef' );
-        is( $stdout,    q{},   '... prints nothing to STDOUT' );
-        is( $stderr,    q{},   '... prints nothing to STDERR' );
-        is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is set correct with symlink' );
-        is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
+            local $ENV{HOME} = $homedir;
+            $script_basedir = File::Spec->catdir( $homelnk, 'abc', '.ssh' );
 
-        chdir $basedir;
+            my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
+            is( $result[0], undef, 'configure_home() returns undef' );
+            is( $stdout,    q{},   '... prints nothing to STDOUT' );
+            is( $stderr,    q{},   '... prints nothing to STDERR' );
+            is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is set correct with symlink' );
+            is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
+
+            chdir $basedir;
+        }
     }
 
     #

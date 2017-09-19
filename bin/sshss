@@ -66,7 +66,10 @@ sub _exec (&@) {
 sub configure_home {
     my $myhome = get_abs_script_basedir();
 
-    return if $myhome !~ s{ /[.]ssh $ }{}xsm;
+    my @dirs = File::Spec->splitdir($myhome);
+    return if $dirs[-1] ne '.ssh';
+    pop @dirs;
+    $myhome = File::Spec->catdir(@dirs);
 
     if ( exists $ENV{HOME} && defined $ENV{HOME} && -d $ENV{HOME} ) {
         my $home = File::Spec->canonpath( $ENV{HOME} );

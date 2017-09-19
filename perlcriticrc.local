@@ -1,3 +1,6 @@
+[ControlStructures::ProhibitPostfixControls]
+flowcontrol = skip
+
 [InputOutput::RequireCheckedSyscalls]
 exclude_functions = print
 

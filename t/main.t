@@ -22,6 +22,10 @@ use Test::TempDir::Tiny;
 main();
 
 sub main {
+    if ( !eval { my @x = getpwuid $EUID; 1 } ) {
+        plan skip_all => 'The getpwuid function is unimplemented';
+    }
+
     require_ok('bin/sshss') or BAIL_OUT();
 
     # If this exists (for whatever strange reason), remove it.

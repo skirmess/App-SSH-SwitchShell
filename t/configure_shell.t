@@ -63,7 +63,9 @@ sub main {
     }
 
     chmod 0755, $shell_1;
-    {
+  SKIP: {
+        skip "File '$shell_1' is not executable - this OS seems to require more then chmod 0755" if !-x $shell_1;
+
         local $ENV{SHELL} = '/bin/dummy';
         local @ARGV = ($shell_1);
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_shell() };

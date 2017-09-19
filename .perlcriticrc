@@ -37,6 +37,8 @@ only = 1
 [ControlStructures::ProhibitMutatingListFunctions]
 [ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions]
 [ControlStructures::ProhibitPostfixControls]
+
+flowcontrol = skip
 [ControlStructures::ProhibitUnlessBlocks]
 [ControlStructures::ProhibitUnreachableCode]
 [ControlStructures::ProhibitUntilBlocks]
