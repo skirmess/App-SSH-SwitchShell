@@ -2,6 +2,8 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+0.003  2017-09-19 21:17:59 UTC
+
   - Fix tests under Windows
 
 0.002  2017-09-16 16:21:02 UTC

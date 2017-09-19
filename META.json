@@ -83,7 +83,7 @@
    "provides" : {
       "App::SSH::SwitchShell" : {
          "file" : "bin/sshss",
-         "version" : "0.002"
+         "version" : "0.003"
       }
    },
    "release_status" : "stable",
@@ -98,7 +98,7 @@
          "web" : "https://github.com/skirmess/App-SSH-SwitchShell"
       }
    },
-   "version" : "0.002",
+   "version" : "0.003",
    "x_BuiltWith" : {
       "modules" : {
          "Capture::Tiny" : "0.46",
@@ -679,7 +679,7 @@
                   "branch" : null,
                   "changelog" : "Changes",
                   "signed" : 0,
-                  "tag" : "0.002",
+                  "tag" : "0.003",
                   "tag_format" : "%v",
                   "tag_message" : ""
                },
