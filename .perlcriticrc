@@ -1,5 +1,5 @@
 # Automatically generated file
-# Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.023
+# Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.024
 
 severity = 1
 only = 1
