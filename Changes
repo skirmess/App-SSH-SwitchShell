@@ -2,6 +2,9 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - t/00-load.t adds a "use lib qw(.)" which should fix
+    http://www.cpantesters.org/cpan/report/9136e46e-9eda-11e7-957d-b956ca56a595
+
 0.003  2017-09-19 21:17:59 UTC
 
   - Fix tests under Windows
