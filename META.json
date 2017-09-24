@@ -84,7 +84,7 @@
    "provides" : {
       "App::SSH::SwitchShell" : {
          "file" : "bin/sshss",
-         "version" : "0.003"
+         "version" : "0.004"
       }
    },
    "release_status" : "stable",
@@ -99,7 +99,7 @@
          "web" : "https://github.com/skirmess/App-SSH-SwitchShell"
       }
    },
-   "version" : "0.003",
+   "version" : "0.004",
    "x_BuiltWith" : {
       "modules" : {
          "Capture::Tiny" : "0.46",
@@ -250,12 +250,12 @@
          {
             "class" : "Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase",
             "name" : "@Author::SKIRMESS/Author::SKIRMESS::RepositoryBase",
-            "version" : "0.023"
+            "version" : "0.024"
          },
          {
             "class" : "Dist::Zilla::Plugin::Author::SKIRMESS::InsertVersion",
             "name" : "@Author::SKIRMESS/Author::SKIRMESS::InsertVersion",
-            "version" : "0.023"
+            "version" : "0.024"
          },
          {
             "class" : "Dist::Zilla::Plugin::NextRelease",
@@ -684,7 +684,7 @@
                   "branch" : null,
                   "changelog" : "Changes",
                   "signed" : 0,
-                  "tag" : "0.003",
+                  "tag" : "0.004",
                   "tag_format" : "%v",
                   "tag_message" : ""
                },
