@@ -91,7 +91,10 @@ sub main {
     }
 
   SKIP: {
-        skip 'The symlink function is unimplemented' if !eval { symlink q{}, q{}; 1 };
+        {
+            no autodie;
+            skip 'The symlink function is unimplemented' if !eval { symlink q{}, q{}; 1 };
+        }
 
         note('HOME and script basedir are reached through symlink');
         {
