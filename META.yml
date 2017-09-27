@@ -30,7 +30,7 @@ no_index:
 provides:
   App::SSH::SwitchShell:
     file: bin/sshss
-    version: '0.004'
+    version: '0.005'
 requires:
   Cwd: '0'
   English: '0'
@@ -42,7 +42,7 @@ resources:
   bugtracker: https://github.com/skirmess/App-SSH-SwitchShell/issues
   homepage: https://github.com/skirmess/App-SSH-SwitchShell
   repository: https://github.com/skirmess/App-SSH-SwitchShell.git
-version: '0.004'
+version: '0.005'
 x_BuiltWith:
   modules:
     Capture::Tiny: '0.46'
@@ -512,7 +512,7 @@ x_Dist_Zilla:
           branch: ~
           changelog: Changes
           signed: '0'
-          tag: '0.004'
+          tag: '0.005'
           tag_format: '%v'
           tag_message: ''
         Dist::Zilla::Role::Git::Repo:
