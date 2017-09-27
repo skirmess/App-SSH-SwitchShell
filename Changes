@@ -2,6 +2,9 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - Add a "use lib qw(.)" to all tests that require bin/sshss
+    http://www.cpantesters.org/cpan/report/ff71e412-a2ac-11e7-9344-ebadca56a595
+
 0.004  2017-09-24 21:35:50 UTC
 
   - t/00-load.t adds a "use lib qw(.)" which should fix
