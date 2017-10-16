@@ -1,8 +1,17 @@
+[-Bangs::ProhibitNumberedNames]
+
 [ControlStructures::ProhibitPostfixControls]
 flowcontrol = skip
 
 [InputOutput::RequireCheckedSyscalls]
-exclude_functions = print
+functions = :builtins
+exclude_functions = exec print say sleep
+
+[-Modules::ProhibitMultiplePackages]
+
+[-Modules::RequireExplicitInclusion]
+
+[-Subroutines::RequireArgUnpacking]
 
 [-Subroutines::ProhibitSubroutinePrototypes]
 
