@@ -244,11 +244,11 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase
       name: '@Author::SKIRMESS/Author::SKIRMESS::RepositoryBase'
-      version: '0.027'
+      version: '0.029'
     -
       class: Dist::Zilla::Plugin::Author::SKIRMESS::InsertVersion
       name: '@Author::SKIRMESS/Author::SKIRMESS::InsertVersion'
-      version: '0.027'
+      version: '0.029'
     -
       class: Dist::Zilla::Plugin::Git::FilePermissions
       name: '@Author::SKIRMESS/Git::FilePermissions'
