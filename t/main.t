@@ -19,7 +19,10 @@ use lib qw(.);
 main();
 
 sub main {
-    if ( !eval { getpwuid $EUID; 1 } ) {
+
+    # $x is used to suppress warning
+    # $x is used twice to shut up perlcritic
+    if ( !eval { my $x = getpwuid $EUID; $x = 1; 1 } ) {
         plan skip_all => 'The getpwuid function is unimplemented';
     }
 
