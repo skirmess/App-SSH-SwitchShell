@@ -1,0 +1,9 @@
+[-Bangs::ProhibitNumberedNames]
+
+[ControlStructures::ProhibitPostfixControls]
+flowcontrol = skip
+
+[-Modules::ProhibitMultiplePackages]
+[-Modules::RequireExplicitInclusion]
+[-Subroutines::RequireArgUnpacking]
+[-ValuesAndExpressions::ProhibitMagicNumbers]

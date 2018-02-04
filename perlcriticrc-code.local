@@ -1,21 +1,12 @@
 [-Bangs::ProhibitNumberedNames]
 
-[ControlStructures::ProhibitPostfixControls]
-flowcontrol = skip
-
 [InputOutput::RequireCheckedSyscalls]
 functions = :builtins
 exclude_functions = exec print say sleep
 
-[-Modules::ProhibitMultiplePackages]
-
-[-Modules::RequireExplicitInclusion]
-
-[-Subroutines::RequireArgUnpacking]
-
 [-Subroutines::ProhibitSubroutinePrototypes]
-
 [-ValuesAndExpressions::ProhibitMagicNumbers]
 
 [Variables::RequireLocalizedPunctuationVars]
 allow = %ENV
+

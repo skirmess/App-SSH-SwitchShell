@@ -7,6 +7,6 @@ use warnings;
 # this test was generated with
 # Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.032
 
-use Test::EOL;
+use Test::Perl::Critic ( -profile => 'xt/author/perlcriticrc-code' );
 
-all_perl_files_ok( { trailing_whitespace => 1 }, grep { -d } qw( bin lib t xt) );
+all_critic_ok(qw(bin lib));

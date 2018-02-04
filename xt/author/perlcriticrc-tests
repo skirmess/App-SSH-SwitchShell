@@ -1,9 +1,13 @@
 # Automatically generated file
-# Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.030
+# Dist::Zilla::Plugin::Author::SKIRMESS::RepositoryBase 0.032
 
 only = 1
 severity = 1
 verbose = [%p] %m at %f line %l, near '%r'\n
+
+# ----------------------------------------------------------
+# Core policies
+# ----------------------------------------------------------
 
 [BuiltinFunctions::ProhibitBooleanGrep]
 [BuiltinFunctions::ProhibitComplexMappings]
@@ -31,15 +35,16 @@ verbose = [%p] %m at %f line %l, near '%r'\n
 [CodeLayout::RequireConsistentNewlines]
 [CodeLayout::RequireTidyCode]
 [CodeLayout::RequireTrailingCommas]
-[ControlStructures::ProhibitCStyleForLoops]
 [ControlStructures::ProhibitCascadingIfElse]
+[ControlStructures::ProhibitCStyleForLoops]
 [ControlStructures::ProhibitDeepNests]
 [ControlStructures::ProhibitLabelsWithSpecialBlockNames]
 [ControlStructures::ProhibitMutatingListFunctions]
 [ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions]
-[ControlStructures::ProhibitPostfixControls]
 
+[ControlStructures::ProhibitPostfixControls]
 flowcontrol = skip
+
 [ControlStructures::ProhibitUnlessBlocks]
 [ControlStructures::ProhibitUnreachableCode]
 [ControlStructures::ProhibitUntilBlocks]
@@ -68,8 +73,8 @@ allow_in_main_unless_in_subroutine = 1
 [InputOutput::RequireCheckedOpen]
 
 [InputOutput::RequireCheckedSyscalls]
+exclude_functions = print say sleep
 functions = :builtins
-exclude_functions = exec print say sleep
 
 [InputOutput::RequireEncodingWithUTF8Layer]
 [Miscellanea::ProhibitFormats]
@@ -80,8 +85,10 @@ exclude_functions = exec print say sleep
 [Modules::ProhibitConditionalUseStatements]
 
 [Modules::ProhibitEvilModules]
-modules = Class::ISA {Found use of Class::ISA. This module is deprecated by the Perl 5 Porters.} Pod::Plainer {Found use of Pod::Plainer. This module is deprecated by the Perl 5 Porters.} Shell {Found use of Shell. This module is deprecated by the Perl 5 Porters.} Switch {Found use of Switch. This module is deprecated by the Perl 5 Porters.} Readonly {Found use of Readonly. Please use constant.pm or Const::Fast.} base {Found use of base. Please use parent instead.} File::Slurp {Found use of File::Slurp. Please use Path::Tiny instead.} common::sense {Found use of common::sense. Please use strict and warnings instead.} Class::Load {Found use of Class::Load. Please use Module::Runtime instead.} Any::Moose {Found use of Any::Moose. Please use Moo instead.} Error {Found use of Error.pm. Please use Throwable.pm instead.} Getopt::Std {Found use of Getopt::Std. Please use Getopt::Long instead.} HTML::Template {Found use of HTML::Template. Please use Template::Toolkit.} IO::Socket::INET6 {Found use of IO::Socket::INET6. Please use IO::Socket::IP.} JSON {Found use of JSON. Please use JSON::MaybeXS or Cpanel::JSON::XS.} JSON::Any {Found use of JSON::Any. Please use JSON::MaybeXS.} List::MoreUtils {Found use of List::MoreUtils. Please use List::Util or List::UtilsBy.} Mouse {Found use of Mouse. Please use Moo.} Net::IRC {Found use of Net::IRC. Please use POE::Component::IRC, Net::Async::IRC, or Mojo::IRC.} XML::Simple {Found use of XML::Simple. Please use XML::LibXML, XML::TreeBuilder, XML::Twig, or Mojo::DOM.} Sub::Infix {Found use of Sub::Infix. Please do not use it.}
+modules = Class::ISA {Found use of Class::ISA. This module is deprecated by the Perl 5 Porters.} Pod::Plainer {Found use of Pod::Plainer. This module is deprecated by the Perl 5 Porters.} Shell {Found use of Shell. This module is deprecated by the Perl 5 Porters.} Switch {Found use of Switch. This module is deprecated by the Perl 5 Porters.} Readonly {Found use of Readonly. Please use constant.pm or Const::Fast.} base {Found use of base. Please use parent instead.} File::Slurp {Found use of File::Slurp. Please use Path::Tiny instead.} common::sense {Found use of common::sense. Please use strict and warnings instead.} Class::Load {Found use of Class::Load. Please use Module::Runtime instead.} Any::Moose {Found use of Any::Moose. Please use Moo instead.} Error {Found use of Error.pm. Please use Throwable.pm instead.} Getopt::Std {Found use of Getopt::Std. Please use Getopt::Long instead.} HTML::Template {Found use of HTML::Template. Please use Template::Toolkit.} IO::Socket::INET6 {Found use of IO::Socket::INET6. Please use IO::Socket::IP.} JSON {Found use of JSON. Please use JSON::MaybeXS or Cpanel::JSON::XS.} JSON::XS {Found use of JSON::XS. Please use JSON::MaybeXS or Cpanel::JSON::XS.} JSON::Any {Found use of JSON::Any. Please use JSON::MaybeXS.} List::MoreUtils {Found use of List::MoreUtils. Please use List::Util or List::UtilsBy.} Mouse {Found use of Mouse. Please use Moo.} Net::IRC {Found use of Net::IRC. Please use POE::Component::IRC, Net::Async::IRC, or Mojo::IRC.} XML::Simple {Found use of XML::Simple. Please use XML::LibXML, XML::TreeBuilder, XML::Twig, or Mojo::DOM.} Sub::Infix {Found use of Sub::Infix. Please do not use it.}
 
+#[Modules::ProhibitExcessMainComplexity]
+#[Modules::ProhibitMultiplePackages]
 [Modules::RequireBarewordIncludes]
 [Modules::RequireEndWithOne]
 [Modules::RequireExplicitPackage]
@@ -112,10 +119,13 @@ modules = Class::ISA {Found use of Class::ISA. This module is deprecated by the 
 [Subroutines::ProhibitManyArgs]
 [Subroutines::ProhibitNestedSubs]
 [Subroutines::ProhibitReturnSort]
+[Subroutines::ProhibitSubroutinePrototypes]
+
 [Subroutines::ProhibitUnusedPrivateSubroutines]
 private_name_regex = _(?!build_)\w+
 
 [Subroutines::ProtectPrivateSubs]
+#[Subroutines::RequireArgUnpacking]
 [Subroutines::RequireFinalReturn]
 [TestingAndDebugging::ProhibitNoStrict]
 [TestingAndDebugging::ProhibitNoWarnings]
@@ -135,6 +145,7 @@ forbid_use_version = 1
 [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 [ValuesAndExpressions::ProhibitLeadingZeros]
 [ValuesAndExpressions::ProhibitLongChainsOfMethodCalls]
+#[ValuesAndExpressions::ProhibitMagicNumbers]
 [ValuesAndExpressions::ProhibitMismatchedOperators]
 [ValuesAndExpressions::ProhibitMixedBooleanOperators]
 [ValuesAndExpressions::ProhibitNoisyQuotes]
@@ -163,20 +174,26 @@ allow = $@ $! $/ $0
 [Variables::RequireInitializationForLocalVars]
 [Variables::RequireLexicalLoopIterators]
 [Variables::RequireLocalizedPunctuationVars]
-
-allow = %ENV
 [Variables::RequireNegativeIndices]
 
-### Perl::Critic::Bangs
+# ----------------------------------------------------------
+# Perl::Critic::Bangs
+# ----------------------------------------------------------
+
 [Bangs::ProhibitBitwiseOperators]
 #[Bangs::ProhibitCommentedOutCode]
 [Bangs::ProhibitDebuggingModules]
 [Bangs::ProhibitFlagComments]
+#[Bangs::ProhibitNoPlan]
+#[Bangs::ProhibitNumberedNames]
 [Bangs::ProhibitRefProtoOrProto]
 [Bangs::ProhibitUselessRegexModifiers]
 #[Bangs::ProhibitVagueNames]
 
-### Perl::Critic::Moose
+# ----------------------------------------------------------
+# Perl::Critic::Moose
+# ----------------------------------------------------------
+
 [Moose::ProhibitDESTROYMethod]
 equivalent_modules = Moo Moo::Role
 
@@ -192,7 +209,10 @@ equivalent_modules = Moo Moo::Role
 [Moose::RequireCleanNamespace]
 [Moose::RequireMakeImmutable]
 
-### Perl::Critic::Freenode
+# ----------------------------------------------------------
+# Perl::Critic::Freenode
+# ----------------------------------------------------------
+
 [Freenode::AmpersandSubCalls]
 [Freenode::ArrayAssignAref]
 [Freenode::BarewordFilehandles]
@@ -216,13 +236,22 @@ equivalent_modules = Moo Moo::Role
 [Freenode::WarningsSwitch]
 [Freenode::WhileDiamondDefaultAssignment]
 
-### Perl::Critic::Policy::HTTPCookies
+# ----------------------------------------------------------
+# Perl::Critic::Policy::HTTPCookies
+# ----------------------------------------------------------
+
 [HTTPCookies]
 
-### Perl::Critic::Itch
+# ----------------------------------------------------------
+# Perl::Critic::Itch
+# ----------------------------------------------------------
+
 #[CodeLayout::ProhibitHashBarewords]
 
-### Perl::Critic::Lax
+# ----------------------------------------------------------
+# Perl::Critic::Lax
+# ----------------------------------------------------------
+
 [Lax::ProhibitComplexMappings::LinesNotStatements]
 #[Lax::ProhibitEmptyQuotes::ExceptAsFallback]
 #[Lax::ProhibitLeadingZeros::ExceptChmod]
@@ -231,7 +260,10 @@ equivalent_modules = Moo Moo::Role
 #[Lax::RequireEndWithTrueConst]
 #[Lax::RequireExplicitPackage::ExceptForPragmata]
 
-### Perl::Critic::More
+# ----------------------------------------------------------
+# Perl::Critic::More
+# ----------------------------------------------------------
+
 #[CodeLayout::RequireASCII]
 #[Editor::RequireEmacsFileVariables]
 #[ErrorHandling::RequireUseOfExceptions]
@@ -240,39 +272,71 @@ equivalent_modules = Moo Moo::Role
 #[ValuesAndExpressions::RequireConstantOnLeftSideOfEquality]
 #[ValuesAndExpressions::RestrictLongStrings]
 
+# ----------------------------------------------------------
 # Perl::Critic::PetPeeves::JTRAMMELL
+# ----------------------------------------------------------
+
 [Variables::ProhibitUselessInitialization]
 
-### Perl::Critic::Policy::BuiltinFunctions::ProhibitDeleteOnArrays
+# ----------------------------------------------------------
+# Perl::Critic::Policy::BuiltinFunctions::ProhibitDeleteOnArrays
+# ----------------------------------------------------------
+
 [BuiltinFunctions::ProhibitDeleteOnArrays]
 
-### Perl::Critic::Policy::BuiltinFunctions::ProhibitReturnOr
+# ----------------------------------------------------------
+# Perl::Critic::Policy::BuiltinFunctions::ProhibitReturnOr
+# ----------------------------------------------------------
+
 [BuiltinFunctions::ProhibitReturnOr]
 
-### Perl::Critic::Policy::Moo::ProhibitMakeImmutable
+# ----------------------------------------------------------
+# Perl::Critic::Policy::Moo::ProhibitMakeImmutable
+# ----------------------------------------------------------
+
 [Moo::ProhibitMakeImmutable]
 
-### Perl::Critic::Policy::ValuesAndExpressions::ProhibitSingleArgArraySlice
-# requires Perl 5.12
+# ----------------------------------------------------------
+# Perl::Critic::Policy::ValuesAndExpressions::ProhibitSingleArgArraySlice
+# ----------------------------------------------------------
+
 #[ValuesAndExpressions::ProhibitSingleArgArraySlice]
 
-### Perl::Critic::Policy::Perlsecret
+# ----------------------------------------------------------
+# Perl::Critic::Policy::Perlsecret
+# ----------------------------------------------------------
+
 [Perlsecret]
 
-### Perl::Critic::Policy::TryTiny::RequireBlockTermination
+# ----------------------------------------------------------
+# Perl::Critic::Policy::TryTiny::RequireBlockTermination
+# ----------------------------------------------------------
+
 [TryTiny::RequireBlockTermination]
 
-### Perl::Critic::Policy::TryTiny::RequireUse
+# ----------------------------------------------------------
+# Perl::Critic::Policy::TryTiny::RequireUse
+# ----------------------------------------------------------
+
 [TryTiny::RequireUse]
 
-### Perl::Critic::Policy::ValuesAndExpressions::PreventSQLInjection
+# ----------------------------------------------------------
+# Perl::Critic::Policy::ValuesAndExpressions::PreventSQLInjection
+# ----------------------------------------------------------
+
 [ValuesAndExpressions::PreventSQLInjection]
 
-### Perl::Critic::Policy::Variables::ProhibitUnusedVarsStricter
+# ----------------------------------------------------------
+# Perl::Critic::Policy::Variables::ProhibitUnusedVarsStricter
+# ----------------------------------------------------------
+
 [Variables::ProhibitUnusedVarsStricter]
 allow_unused_subroutine_arguments = 1
 
-### Perl::Critic::Pulp
+# ----------------------------------------------------------
+# Perl::Critic::Pulp
+# ----------------------------------------------------------
+
 [CodeLayout::ProhibitFatCommaNewline]
 #[CodeLayout::ProhibitIfIfSameLine]
 [CodeLayout::RequireFinalSemicolon]
@@ -313,13 +377,20 @@ allow_unused_subroutine_arguments = 1
 [ValuesAndExpressions::RequireNumericVersion]
 [ValuesAndExpressions::UnexpandedSpecialLiteral]
 
+# ----------------------------------------------------------
+# Perl::Critic::StricterSubs
+# ----------------------------------------------------------
+
+#[Modules::RequireExplicitInclusion]
 #[Subroutines::ProhibitCallsToUndeclaredSubs]
 #[Subroutines::ProhibitCallsToUnexportedSubs]
 [Subroutines::ProhibitExportingUndeclaredSubs]
 [Subroutines::ProhibitQualifiedSubDeclarations]
 
-### Perl::Critic::Tics
+# ----------------------------------------------------------
+# Perl::Critic::Tics
+# ----------------------------------------------------------
+
 #[Tics::ProhibitLongLines]
 [Tics::ProhibitManyArrows]
 [Tics::ProhibitUseBase]
-
