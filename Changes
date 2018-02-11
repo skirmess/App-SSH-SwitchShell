@@ -2,6 +2,7 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - Replaced plugin bundle Author::SKIRMESS with an inline bundle through a Git submodule on https://github.com/skirmess/dzil-inc
   - Removed all 'no critic' comments from the source files
 
 0.005  2017-09-27 17:42:12 UTC

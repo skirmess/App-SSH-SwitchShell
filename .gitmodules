@@ -1,0 +1,3 @@
+[submodule "dzil-inc"]
+	path = dzil-inc
+	url = git@github.com:skirmess/dzil-inc.git
