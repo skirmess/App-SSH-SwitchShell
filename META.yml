@@ -434,9 +434,9 @@ x_Dist_Zilla:
       name: =MyBundle/MetaJSON
       version: '6.010'
     -
-      class: Dist::Zilla::Plugin::CPANFile
-      name: =MyBundle/CPANFile
-      version: '6.010'
+      class: MyCPANFile
+      name: =MyBundle/=MyCPANFile
+      version: '0.033'
     -
       class: Dist::Zilla::Plugin::ReadmeAnyFromPod
       config:

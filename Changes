@@ -2,6 +2,7 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - Removed cpanfile from distribution
   - Replaced plugin bundle Author::SKIRMESS with an inline bundle through a Git submodule on https://github.com/skirmess/dzil-inc
   - Removed all 'no critic' comments from the source files
 
