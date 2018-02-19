@@ -15,10 +15,6 @@
    "name" : "App-SSH-SwitchShell",
    "no_index" : {
       "directory" : [
-         "corpus",
-         "dzil-inc",
-         "examples",
-         "inc",
          "t",
          "xt"
       ]

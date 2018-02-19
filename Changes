@@ -2,6 +2,7 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - Remove non-existing default directories from no_index in META.* files
   - Removed develop dependencies from META.json file
   - Removed x_authority from META.* files
   - Removed x_Dist_Zilla from META.* files
