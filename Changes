@@ -2,6 +2,7 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - Added xt/author/perltidy.t test based on Test::PerlTidy
   - Remove non-existing default directories from no_index in META.* files
   - Removed develop dependencies from META.json file
   - Removed x_authority from META.* files

@@ -23,6 +23,7 @@ on test => sub {
 
 on develop => sub {
     requires 'FindBin';
+    requires 'Path::Tiny';
     requires 'Perl::Critic', '1.130';
     requires 'Perl::Critic::Policy::Bangs::ProhibitBitwiseOperators', '1.12';
     requires 'Perl::Critic::Policy::Bangs::ProhibitDebuggingModules', '1.12';
@@ -118,6 +119,7 @@ on develop => sub {
     requires 'Test::More', '0.88';
     requires 'Test::NoTabs';
     requires 'Test::Perl::Critic';
+    requires 'Test::PerlTidy';
     requires 'Test::Pod', '1.26';
     requires 'Test::Pod::No404s';
     requires 'Test::Portability::Files';
