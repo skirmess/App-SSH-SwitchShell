@@ -1,6 +1,7 @@
 # Automatically generated file; DO NOT EDIT.
 
 only = 1
+profile-strictness = fatal
 severity = 1
 verbose = [%p] %m at %f line %l, near '%r'\n
 
