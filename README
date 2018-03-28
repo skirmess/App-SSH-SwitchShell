@@ -5,6 +5,8 @@ NAME
 
 VERSION
 
+    Version 0.005
+
 SYNOPSIS
 
     sshss [shell]
@@ -149,6 +151,23 @@ ENVIRONMENT
 SEE ALSO
 
     passwd(4), "AUTHORIZED_KEYS FILE FORMAT" in sshd(1)
+
+SUPPORT
+
+ Bugs / Feature Requests
+
+    Please report any bugs or feature requests through the issue tracker at
+    https://github.com/skirmess/App-SSH-SwitchShell/issues. You will be
+    notified automatically of any progress on your issue.
+
+ Source Code
+
+    This is open source software. The code repository is available for
+    public review and contribution under the terms of the license.
+
+    https://github.com/skirmess/App-SSH-SwitchShell
+
+      git clone https://github.com/skirmess/App-SSH-SwitchShell.git
 
 AUTHOR
 

@@ -4,6 +4,8 @@ sshss - Use your preferred shell and own home directory for shared SSH accounts
 
 # VERSION
 
+Version 0.005
+
 # SYNOPSIS
 
 - **sshss** \[shell\]
@@ -138,6 +140,23 @@ invalid, the SHELL environment variable is set to `/bin/sh` instead.
 # SEE ALSO
 
 [passwd(4)](http://man.he.net/man4/passwd), ["AUTHORIZED\_KEYS FILE FORMAT" in sshd(1)](http://man.he.net/man1/sshd)
+
+# SUPPORT
+
+## Bugs / Feature Requests
+
+Please report any bugs or feature requests through the issue tracker
+at [https://github.com/skirmess/App-SSH-SwitchShell/issues](https://github.com/skirmess/App-SSH-SwitchShell/issues).
+You will be notified automatically of any progress on your issue.
+
+## Source Code
+
+This is open source software. The code repository is available for
+public review and contribution under the terms of the license.
+
+[https://github.com/skirmess/App-SSH-SwitchShell](https://github.com/skirmess/App-SSH-SwitchShell)
+
+    git clone https://github.com/skirmess/App-SSH-SwitchShell.git
 
 # AUTHOR
 
