@@ -4,7 +4,7 @@
       "Sven Kirmess <sven.kirmess@kzone.ch>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 6.010, CPAN::Meta::Converter version 2.150005",
+   "generated_by" : "Dist::Zilla version 6.010, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "freebsd"
    ],
