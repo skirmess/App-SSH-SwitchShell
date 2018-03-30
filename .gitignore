@@ -2,7 +2,6 @@
 *~
 .*.swp
 .build
-.cache
 .perlcritic_package.yml
 App-SSH-SwitchShell-*
 tmp
