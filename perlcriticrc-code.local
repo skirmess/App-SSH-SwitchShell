@@ -5,8 +5,6 @@ functions = :builtins
 exclude_functions = exec print say sleep
 
 [-Subroutines::ProhibitSubroutinePrototypes]
-[-ValuesAndExpressions::ProhibitMagicNumbers]
 
 [Variables::RequireLocalizedPunctuationVars]
 allow = %ENV
-
