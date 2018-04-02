@@ -4,7 +4,7 @@ sshss - Use your preferred shell and own home directory for shared SSH accounts
 
 # VERSION
 
-Version 0.005
+Version 0.006
 
 # SYNOPSIS
 

@@ -4,7 +4,7 @@ use 5.006;
 use strict;
 use warnings;
 
-our $VERSION = '0.005';
+our $VERSION = '0.006';
 
 package App::SSH::SwitchShell;
 
@@ -147,7 +147,7 @@ sshss - Use your preferred shell and own home directory for shared SSH accounts
 
 =head1 VERSION
 
-Version 0.005
+Version 0.006
 
 =head1 SYNOPSIS
 

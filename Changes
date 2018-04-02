@@ -2,15 +2,11 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
-  - Added xt/author/perltidy.t test based on Test::PerlTidy
-  - Remove non-existing default directories from no_index in META.* files
-  - Removed develop dependencies from META.json file
-  - Removed x_authority from META.* files
-  - Removed x_Dist_Zilla from META.* files
-  - Removed x_BuiltWith from META.* files
-  - Removed cpanfile from distribution
-  - Replaced plugin bundle Author::SKIRMESS with an inline bundle through a Git submodule on https://github.com/skirmess/dzil-inc
-  - Removed all 'no critic' comments from the source files
+0.006  2018-04-02 23:12:22 UTC
+
+  - No code changes
+  - Distribution cleanup
+  - Bumped dependency on Moose to 2.1203
 
 0.005  2017-09-27 17:42:12 UTC
 
