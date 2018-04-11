@@ -6,7 +6,7 @@ use warnings;
 
 # Automatically generated file; DO NOT EDIT.
 
-use FindBin qw($Bin);
+use FindBin qw($RealBin);
 use Path::Tiny;
 use Test::More;
 use Test::PerlTidy;
@@ -53,7 +53,7 @@ if ( !@files ) {
 
 plan tests => scalar @files;
 
-my $perltidyrc = path($Bin)->parent(2)->child('.perltidyrc')->stringify;
+my $perltidyrc = path($RealBin)->parent(2)->child('.perltidyrc')->stringify;
 
 $Test::PerlTidy::MUTE = 1;
 
