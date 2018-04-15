@@ -73,9 +73,9 @@ install:
   - |
     if [ -n "$AUTHOR_TESTING" ]
     then
-      cpanm --quiet --installdeps --notest --skip-satisfied --with-develop .
+      cpanm --verbose --installdeps --notest --skip-satisfied --with-develop .
     else
-      cpanm --quiet --installdeps --notest --skip-satisfied .
+      cpanm --verbose --installdeps --notest --skip-satisfied .
     fi
 
 script:
