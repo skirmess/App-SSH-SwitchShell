@@ -1,8 +1,9 @@
 [-Bangs::ProhibitNumberedNames]
 
 [ControlStructures::ProhibitPostfixControls]
-flowcontrol = skip
+flowcontrol = BAIL_OUT skip
 
 [-Modules::ProhibitMultiplePackages]
 [-Modules::RequireExplicitInclusion]
 [-Subroutines::RequireArgUnpacking]
+[-ValuesAndExpressions::ProhibitLeadingZeros]

@@ -3,7 +3,6 @@
 use 5.006;
 use strict;
 use warnings;
-use autodie;
 
 use Capture::Tiny qw(capture);
 use Cwd;
@@ -31,7 +30,7 @@ sub main {
     {
         local $ENV{HOME} = '/home/dummy';
         $script_basedir = File::Spec->catdir( $tmpdir, 'no_dot_ssh' );
-        mkdir $script_basedir;
+        _mkdir($script_basedir);
 
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
         is( $result[0], undef,         'configure_home() returns undef' );
@@ -45,7 +44,7 @@ sub main {
     {
         local $ENV{HOME} = '/home/dummy';
         $script_basedir = File::Spec->catdir( $tmpdir, '.ssh' );
-        mkdir $script_basedir;
+        _mkdir($script_basedir);
 
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
         is( $result[0],                     undef,   'configure_home() returns undef' );
@@ -54,7 +53,7 @@ sub main {
         is( $ENV{HOME},                     $tmpdir, '... HOME environment variable is correctly set' );
         is( File::Spec->canonpath( cwd() ), $tmpdir, '... cwd is correctly changed' );
 
-        chdir $basedir;
+        _chdir($basedir);
     }
 
     note('feed invalid dir');
@@ -70,7 +69,7 @@ sub main {
         is( $ENV{HOME}, $not_existing_home, '... HOME environment variable is correctly set' );
         is( cwd(),      $basedir,           '... cwd is not changed because dir does not exist' );
 
-        chdir $basedir;
+        _chdir($basedir);
     }
 
     note('HOME env variable same as script basedir');
@@ -85,27 +84,26 @@ sub main {
         is( $ENV{HOME}, $tmpdir,  '... HOME environment variable is still correct' );
         is( cwd(),      $basedir, '... cwd is not changed because script basedir is same as HOME env variable' );
 
-        chdir $basedir;
+        _chdir($basedir);
     }
 
   SKIP: {
         {
-            no autodie;
-            skip 'The symlink function is unimplemented' if !eval { symlink q{}, q{}; 1 };
+            skip 'The symlink function is unimplemented' if !eval { symlink q{}, q{}; 1 };    ## no critic (InputOutput::RequireCheckedSyscalls)
         }
 
         note('HOME and script basedir are reached through symlink');
         {
             my $homedir = File::Spec->catdir( $tmpdir, 'HOMEDIR' );
-            mkdir $homedir;
+            _mkdir($homedir);
 
             my $homelnk = File::Spec->catfile( $tmpdir, 'HOMELINK' );
-            symlink 'HOMEDIR', $homelnk;
+            _symlink( 'HOMEDIR', $homelnk );
 
             $script_basedir = File::Spec->catdir( $homelnk, 'abc' );
-            mkdir $script_basedir;
+            _mkdir($script_basedir);
             $script_basedir = File::Spec->catdir( $script_basedir, '.ssh' );
-            mkdir $script_basedir;
+            _mkdir($script_basedir);
 
             local $ENV{HOME} = $homelnk;
 
@@ -116,7 +114,7 @@ sub main {
             is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is set correct with symlink' );
             is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
 
-            chdir $basedir;
+            _chdir($basedir);
         }
 
         note('HOME is reached through symlink, script basedir is not');
@@ -134,7 +132,7 @@ sub main {
             is( $ENV{HOME}, File::Spec->catdir( $homedir, 'abc' ), '... HOME environment variable is set correct with symlink' );
             is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
 
-            chdir $basedir;
+            _chdir($basedir);
         }
 
         note('script basedir is reached through symlink, HOME is not');
@@ -152,7 +150,7 @@ sub main {
             is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is set correct with symlink' );
             is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
 
-            chdir $basedir;
+            _chdir($basedir);
         }
     }
 
@@ -160,6 +158,30 @@ sub main {
     done_testing();
 
     exit 0;
+}
+
+sub _chdir {
+    my ($dir) = @_;
+
+    my $rc = chdir $dir;
+    BAIL_OUT("chdir $dir: $!") if !$rc;
+    return $rc;
+}
+
+sub _mkdir {
+    my ($dir) = @_;
+
+    my $rc = mkdir $dir;
+    BAIL_OUT("mkdir $dir: $!") if !$rc;
+    return $rc;
+}
+
+sub _symlink {
+    my ( $old_name, $new_name ) = @_;
+
+    my $rc = symlink $old_name, $new_name;
+    BAIL_OUT("symlink $old_name, $new_name: $!") if !$rc;
+    return $rc;
 }
 
 # vim: ts=4 sts=4 sw=4 et: syntax=perl

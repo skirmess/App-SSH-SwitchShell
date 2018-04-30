@@ -16,38 +16,38 @@ git:
 
 matrix:
   include:
+    - perl: '5.8.0'
+
+    - perl: '5.8.1'
+
+    - perl: '5.8.2'
+
     - perl: '5.8'
 
+    - perl: '5.10.0'
+
     - perl: '5.10'
-      env: AUTHOR_TESTING=1
 
     - perl: '5.12'
-      env: AUTHOR_TESTING=1
 
     - perl: '5.14'
-      env: AUTHOR_TESTING=1
 
     - perl: '5.16'
-      env: AUTHOR_TESTING=1
 
     - perl: '5.18'
-      env: AUTHOR_TESTING=1
 
     - perl: '5.18'
       env: AUTHOR_TESTING=1
       os: osx
 
     - perl: '5.20'
-      env: AUTHOR_TESTING=1
 
     - perl: '5.22'
-      env: AUTHOR_TESTING=1
 
     - perl: '5.24'
       env: AUTHOR_TESTING=1
 
     - perl: '5.26'
-      env: AUTHOR_TESTING=1
 
 before_install:
   - |
@@ -68,14 +68,52 @@ before_install:
         eval $(perl -I $HOME/perl5/lib/perl5/ -Mlocal::lib)
         ;;
     esac
+  - |
+    if [[ $TRAVIS_PERL_VERSION =~ 5[.][1-9][0-9]*[.][0-9][0-9]* ]]
+    then
+        echo "Initializing the Travis Perl Helper"
+
+        if [ -z "$AUTHOR_TESTING" ]
+        then
+            AUTHOR_TESTING=0
+        fi
+
+        git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+        source ~/travis-perl-helpers/init
+        build-perl
+
+        if [ "$AUTHOR_TESTING" = 0 ]
+        then
+            unset AUTHOR_TESTING
+        fi
+    fi
+  - perl -V
+  - perl -e '
+      my $ok = 0;
+      if ( $ENV{TRAVIS_PERL_VERSION} =~ m{ ^ 5 [.] ([1-9] [0-9]*) $ }xsm ) {
+          my $want = sprintf "5.%03i", $1;
+          if ( $] =~ m{ ^ \Q$want\E [0-9]{3} $ }xsm ) {
+              $ok = 1;
+          }
+      }
+      elsif ( $ENV{TRAVIS_PERL_VERSION} =~ m{ ^ 5 [.] ( [1-9] [0-9]* ) [.] ( [0-9]+ ) $ }xsm ) {
+          if ( $] eq sprintf "5.%03i%03i", $1, $2 ) {
+              $ok = 1;
+          }
+      }
+
+      die "We asked for Perl $ENV{TRAVIS_PERL_VERSION} but got $]\n" if $ok == 0;
+      print "Perl $ENV{TRAVIS_PERL_VERSION} is requested and $] is installed. Good!\n";
+      exit 0;
+    '
 
 install:
   - |
     if [ -n "$AUTHOR_TESTING" ]
     then
-      cpanm --verbose --installdeps --notest --skip-satisfied --with-develop .
+        cpanm --verbose --installdeps --notest --skip-satisfied --with-develop .
     else
-      cpanm --verbose --installdeps --notest --skip-satisfied .
+        cpanm --verbose --installdeps --notest --skip-satisfied .
     fi
 
 script:
@@ -83,5 +121,5 @@ script:
   - |
     if [ -n "$AUTHOR_TESTING" ]
     then
-      prove -lr xt/author
+        prove -lr xt/author
     fi

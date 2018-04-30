@@ -3,7 +3,6 @@
 use 5.006;
 use strict;
 use warnings;
-use autodie;
 
 use Capture::Tiny qw(capture);
 use Cwd;
@@ -35,9 +34,9 @@ sub main {
 
     # create a dummy "shell"
     my $shell = File::Spec->catfile( $tmpdir, 'shell.pl' );
-    open my $fh, '>', $shell;
-    close $fh;
-    chmod 0755, $shell;
+    open my $fh, '>', $shell or BAIL_OUT("open $shell: $!");
+    close $fh or BAIL_OUT("close $shell: $!");
+    chmod 0755, $shell or BAIL_OUT("chomd 0755, $shell: $!");
 
     # mock get_abs_script_basedir and _exec
     my $script_basedir;
@@ -48,7 +47,7 @@ sub main {
 
     # Change to a different tempdir to see if the chdir functionality works
     my $basedir = tempdir();
-    chdir $basedir;
+    _chdir($basedir);
 
     note('login shell, script inside .ssh dir');
     {
@@ -56,7 +55,7 @@ sub main {
         local $ENV{SHELL} = '/bin/dummy';
 
         $script_basedir = File::Spec->catdir( $tmpdir, '.ssh' );
-        mkdir $script_basedir;
+        _mkdir($script_basedir);
 
         local @ARGV = ($shell);
 
@@ -71,7 +70,7 @@ sub main {
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
 
-        chdir $basedir;
+        _chdir($basedir);
     }
 
     note(q{run 'perl -v', script inside .ssh dir});
@@ -95,7 +94,7 @@ sub main {
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [ 'shell.pl', '-c', "$EXECUTABLE_NAME -v" ], '... with the correct arguments' );
 
-        chdir $basedir;
+        _chdir($basedir);
     }
 
     note('login shell, script in "invalid directory"');
@@ -119,7 +118,7 @@ sub main {
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
 
-        chdir $basedir;
+        _chdir($basedir);
     }
 
     note('login shell, script in ~/.ssh');
@@ -127,7 +126,7 @@ sub main {
         local $ENV{HOME}  = $tmpdir;
         local $ENV{SHELL} = '/bin/dummy';
 
-        chdir $tmpdir;
+        _chdir($tmpdir);
         $script_basedir = File::Spec->catdir( $tmpdir, '.ssh' );
 
         local @ARGV = ($shell);
@@ -143,21 +142,21 @@ sub main {
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
 
-        chdir $basedir;
+        _chdir($basedir);
     }
 
     note('login shell, HOME and script basedir are reached through symlink');
     {
         my $homedir = File::Spec->catdir( $tmpdir, 'HOMEDIR' );
-        mkdir $homedir;
+        _mkdir($homedir);
 
         my $homelnk = File::Spec->catfile( $tmpdir, 'HOMELINK' );
-        symlink 'HOMEDIR', $homelnk;
+        _symlink( 'HOMEDIR', $homelnk );
 
         $script_basedir = File::Spec->catdir( $homelnk, 'abc' );
-        mkdir $script_basedir;
+        _mkdir($script_basedir);
         $script_basedir = File::Spec->catdir( $script_basedir, '.ssh' );
-        mkdir $script_basedir;
+        _mkdir($script_basedir);
 
         local $ENV{HOME}  = $homelnk;
         local $ENV{SHELL} = '/bin/dummy';
@@ -175,7 +174,7 @@ sub main {
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
 
-        chdir $basedir;
+        _chdir($basedir);
     }
 
     note('login shell, HOME is reached through symlink, script basedir is not');
@@ -201,7 +200,7 @@ sub main {
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
 
-        chdir $basedir;
+        _chdir($basedir);
     }
 
     note('login shell, script basedir is reached through symlink, HOME is not');
@@ -227,13 +226,37 @@ sub main {
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
 
-        chdir $basedir;
+        _chdir($basedir);
     }
 
     #
     done_testing();
 
     exit 0;
+}
+
+sub _chdir {
+    my ($dir) = @_;
+
+    my $rc = chdir $dir;
+    BAIL_OUT("chdir $dir: $!") if !$rc;
+    return $rc;
+}
+
+sub _mkdir {
+    my ($dir) = @_;
+
+    my $rc = mkdir $dir;
+    BAIL_OUT("mkdir $dir: $!") if !$rc;
+    return $rc;
+}
+
+sub _symlink {
+    my ( $old_name, $new_name ) = @_;
+
+    my $rc = symlink $old_name, $new_name;
+    BAIL_OUT("symlink $old_name, $new_name: $!") if !$rc;
+    return $rc;
 }
 
 # vim: ts=4 sts=4 sw=4 et: syntax=perl

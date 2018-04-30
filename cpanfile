@@ -15,7 +15,6 @@ on test => sub {
     requires 'Test::MockModule';
     requires 'Test::More';
     requires 'Test::TempDir::Tiny';
-    requires 'autodie';
     requires 'lib';
     requires 'perl', '5.006';
     requires 'subs';

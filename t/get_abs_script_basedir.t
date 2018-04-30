@@ -3,7 +3,6 @@
 use 5.006;
 use strict;
 use warnings;
-use autodie;
 
 use Cwd;
 use File::Spec;

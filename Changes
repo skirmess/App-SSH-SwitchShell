@@ -2,6 +2,8 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - Removed autodie in tests
+
 0.006  2018-04-02 23:12:22 UTC
 
   - No code changes
