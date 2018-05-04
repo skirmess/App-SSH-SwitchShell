@@ -14,7 +14,7 @@ on test => sub {
     requires 'Capture::Tiny';
     requires 'Test::MockModule';
     requires 'Test::More';
-    requires 'Test::TempDir::Tiny';
+    requires 'Test::TempDir::Tiny', '0.017';
     requires 'lib';
     requires 'perl', '5.006';
     requires 'subs';

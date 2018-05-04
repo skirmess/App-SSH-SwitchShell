@@ -16,8 +16,6 @@ git:
 
 matrix:
   include:
-    - perl: '5.8.0'
-
     - perl: '5.8.1'
 
     - perl: '5.8.2'
@@ -88,24 +86,7 @@ before_install:
         fi
     fi
   - perl -V
-  - perl -e '
-      my $ok = 0;
-      if ( $ENV{TRAVIS_PERL_VERSION} =~ m{ ^ 5 [.] ([1-9] [0-9]*) $ }xsm ) {
-          my $want = sprintf "5.%03i", $1;
-          if ( $] =~ m{ ^ \Q$want\E [0-9]{3} $ }xsm ) {
-              $ok = 1;
-          }
-      }
-      elsif ( $ENV{TRAVIS_PERL_VERSION} =~ m{ ^ 5 [.] ( [1-9] [0-9]* ) [.] ( [0-9]+ ) $ }xsm ) {
-          if ( $] eq sprintf "5.%03i%03i", $1, $2 ) {
-              $ok = 1;
-          }
-      }
-
-      die "We asked for Perl $ENV{TRAVIS_PERL_VERSION} but got $]\n" if $ok == 0;
-      print "Perl $ENV{TRAVIS_PERL_VERSION} is requested and $] is installed. Good!\n";
-      exit 0;
-    '
+  - curl -L https://raw.githubusercontent.com/skirmess/dzil-inc/master/bin/check-travis-perl-version | perl -
 
 install:
   - |
