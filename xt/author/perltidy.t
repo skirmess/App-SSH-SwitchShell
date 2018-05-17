@@ -41,7 +41,7 @@ for my $dir (qw(t xt)) {
   TEST:
     while ( defined( my $file = $it->() ) ) {
         next TEST if !-f $file;
-        next TEST if $file !~ m{ [.] t $ }xsm;
+        next TEST if $file !~ m{ [.] t $ }xsm && $file !~ m{ ^ t/lib/ .* [.] pm $ }xsm;
 
         push @files, $file->stringify;
     }

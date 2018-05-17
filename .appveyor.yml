@@ -2,22 +2,94 @@
 
 skip_tags: true
 
-cache:
-  - C:\strawberry -> appveyor.yml
+environment:
+  AUTOMATED_TESTING: 1
+  TAR_OPTIONS: --warning=no-unknown-keyword
+
+  matrix:
+    - PERL_TYPE: cygwin
+      AUTHOR_TESTING: 1
+
+    - PERL_TYPE: cygwin64
+      AUTHOR_TESTING: 1
+
+    - PERL_TYPE: strawberry
+      AUTHOR_TESTING: 1
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.14.4.1
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.16.3.20170202
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.18.4.1
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.20.3.3
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.22.3.1
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.24.4.1
 
 install:
-  - if not exist "C:\strawberry" cinst strawberryperl
-  - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
-  - cd %APPVEYOR_BUILD_FOLDER%
+  - ps: 'Write-Host "ERROR: Unknown Perl type ''$env:PERL_TYPE''"'
+  - exit 1
+
+for:
+  -
+    matrix:
+      only:
+        - PERL_TYPE: cygwin
+
+    install:
+      - c:\cygwin\setup-x86.exe -q -C devel -C perl -P libcrypt-devel -P openssl-devel
+      - set PATH=C:\cygwin\bin;C:\cygwin\usr\local\bin;%PATH%
+
+  -
+    matrix:
+      only:
+        - PERL_TYPE: cygwin64
+
+    install:
+      - c:\cygwin64\setup-x86_64.exe -q -C devel -C perl -P libcrypt-devel -P openssl-devel
+      - set PATH=C:\cygwin64\bin;C:\cygwin64\usr\local\bin;%PATH%
+
+  -
+    matrix:
+      only:
+        - PERL_TYPE: strawberry
+
+    install:
+      - if     defined PERL_VERSION cinst -y strawberryperl --version %PERL_VERSION%
+      - if not defined PERL_VERSION cinst -y strawberryperl
+      - set PATH=C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;C:\Strawberry\c\bin;%PATH%
+
+before_build:
+  - ps: systeminfo | Select-String "^OS Name", "^OS Version"
+  - where perl
+  - perl -V
+  - ps: $env:make = perl -MConfig -e'print $Config{make}'
+  - echo %make%
+  - if not exist %make% where %make%
+  - where gcc
+  - gcc --version
+  - ps: Invoke-WebRequest https://cpanmin.us/ -OutFile cpanm.pl
+  - perl cpanm.pl App::cpanminus
+  - unlink cpanm.pl
+  - where cpanm
+  - perl -S cpanm --version
   - mkdir C:\tmp
-  - cpanm --verbose --installdeps --notest --skip-satisfied --with-develop .
+  - if     defined AUTHOR_TESTING perl -S cpanm --verbose --installdeps --notest --skip-satisfied --with-develop .
+  - if not defined AUTHOR_TESTING perl -S cpanm --verbose --installdeps --notest --skip-satisfied .
 
 build_script:
+  - set PERL_USE_UNSAFE_INC=0
   - perl Makefile.PL
-  - gmake
+  - '%make%'
 
 test_script:
-  - set AUTOMATED_TESTING=1
-  - set PERL_USE_UNSAFE_INC=0
-  - gmake test
-  - prove -lr xt/author
+  - '%make% test'
+  - if defined AUTHOR_TESTING perl -S prove -lr xt/author
