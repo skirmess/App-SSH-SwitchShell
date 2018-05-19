@@ -87,7 +87,7 @@ before_install:
     fi
   - which perl
   - perl -V
-  - curl -L https://raw.githubusercontent.com/skirmess/dzil-inc/master/bin/check-travis-perl-version | perl -
+  - curl -L https://raw.githubusercontent.com/skirmess/dzil-inc/master/bin/check-ci-perl-version | perl - --travis
   - which make
   - which gcc
   - gcc --version

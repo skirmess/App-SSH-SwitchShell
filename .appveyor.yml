@@ -45,6 +45,11 @@ for:
         - PERL_TYPE: cygwin
 
     install:
+      - ps: Invoke-WebRequest https://raw.githubusercontent.com/skirmess/dzil-inc/master/bin/fix-appveyor-matrix-bug -OutFile fix-appveyor-matrix-bug.pl
+      - perl fix-appveyor-matrix-bug.pl > fix-appveyor-matrix-bug.ps1
+      - unlink fix-appveyor-matrix-bug.pl
+      - ps: .\fix-appveyor-matrix-bug.ps1
+      - unlink fix-appveyor-matrix-bug.ps1
       - c:\cygwin\setup-x86.exe -q -C devel -C perl -P libcrypt-devel -P openssl-devel
       - set PATH=C:\cygwin\bin;C:\cygwin\usr\local\bin;%PATH%
 
@@ -54,6 +59,11 @@ for:
         - PERL_TYPE: cygwin64
 
     install:
+      - ps: Invoke-WebRequest https://raw.githubusercontent.com/skirmess/dzil-inc/master/bin/fix-appveyor-matrix-bug -OutFile fix-appveyor-matrix-bug.pl
+      - perl fix-appveyor-matrix-bug.pl > fix-appveyor-matrix-bug.ps1
+      - unlink fix-appveyor-matrix-bug.pl
+      - ps: .\fix-appveyor-matrix-bug.ps1
+      - unlink fix-appveyor-matrix-bug.ps1
       - c:\cygwin64\setup-x86_64.exe -q -C devel -C perl -P libcrypt-devel -P openssl-devel
       - set PATH=C:\cygwin64\bin;C:\cygwin64\usr\local\bin;%PATH%
 
@@ -63,6 +73,11 @@ for:
         - PERL_TYPE: strawberry
 
     install:
+      - ps: Invoke-WebRequest https://raw.githubusercontent.com/skirmess/dzil-inc/master/bin/fix-appveyor-matrix-bug -OutFile fix-appveyor-matrix-bug.pl
+      - perl fix-appveyor-matrix-bug.pl > fix-appveyor-matrix-bug.ps1
+      - unlink fix-appveyor-matrix-bug.pl
+      - ps: .\fix-appveyor-matrix-bug.ps1
+      - unlink fix-appveyor-matrix-bug.ps1
       - if     defined PERL_VERSION cinst -y strawberryperl --version %PERL_VERSION%
       - if not defined PERL_VERSION cinst -y strawberryperl
       - set PATH=C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;C:\Strawberry\c\bin;%PATH%
@@ -71,6 +86,9 @@ before_build:
   - ps: systeminfo | Select-String "^OS Name", "^OS Version"
   - where perl
   - perl -V
+  - ps: Invoke-WebRequest https://raw.githubusercontent.com/skirmess/dzil-inc/master/bin/check-ci-perl-version -OutFile check-ci-perl-version.pl
+  - perl check-ci-perl-version.pl --appveyor
+  - unlink check-ci-perl-version.pl
   - ps: $env:make = perl -MConfig -e'print $Config{make}'
   - echo %make%
   - if not exist %make% where %make%
