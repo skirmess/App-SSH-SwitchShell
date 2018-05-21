@@ -2,6 +2,7 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - skip needs $how_many with Test::More < 1.302013_009
   - Removed autodie in tests
 
 0.006  2018-04-02 23:12:22 UTC
