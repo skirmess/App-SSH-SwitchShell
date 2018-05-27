@@ -14,25 +14,49 @@ environment:
       AUTHOR_TESTING: 1
 
     - PERL_TYPE: strawberry
+      PERL_VERSION: 5.8.9
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.8.9/strawberry-perl-5.8.9.5.zip
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.10.0
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.10.0/strawberry-perl-5.10.0.6.zip
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.10.1
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.10.1.5/strawberry-perl-5.10.1.5.zip
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.12.3
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.12.3.0/strawberry-perl-5.12.3.0-64bit.zip
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.14.4
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.14.4.1/strawberry-perl-5.14.4.1-64bit.zip
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.16.3
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.16.3.1/strawberry-perl-5.16.3.1-64bit.zip
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.18.4
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.18.4.1/strawberry-perl-5.18.4.1-64bit.zip
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.20.3
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.20.3.3/strawberry-perl-5.20.3.3-64bit.zip
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.22.3
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.22.3.1/strawberry-perl-5.22.3.1-64bit.zip
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.24.4
       AUTHOR_TESTING: 1
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.24.4.1/strawberry-perl-5.24.4.1-64bit.zip
 
     - PERL_TYPE: strawberry
-      PERL_VERSION: 5.14.4.1
-
-    - PERL_TYPE: strawberry
-      PERL_VERSION: 5.16.3.20170202
-
-    - PERL_TYPE: strawberry
-      PERL_VERSION: 5.18.4.1
-
-    - PERL_TYPE: strawberry
-      PERL_VERSION: 5.20.3.3
-
-    - PERL_TYPE: strawberry
-      PERL_VERSION: 5.22.3.1
-
-    - PERL_TYPE: strawberry
-      PERL_VERSION: 5.24.4.1
+      PERL_VERSION: 5.26.2
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.26.2.1/strawberry-perl-5.26.2.1-64bit.zip
 
 install:
   - ps: 'Write-Host "ERROR: Unknown Perl type ''$env:PERL_TYPE''"'
@@ -45,11 +69,6 @@ for:
         - PERL_TYPE: cygwin
 
     install:
-      - ps: Invoke-WebRequest https://raw.githubusercontent.com/skirmess/dzil-inc/master/bin/fix-appveyor-matrix-bug -OutFile fix-appveyor-matrix-bug.pl
-      - perl fix-appveyor-matrix-bug.pl > fix-appveyor-matrix-bug.ps1
-      - unlink fix-appveyor-matrix-bug.pl
-      - ps: .\fix-appveyor-matrix-bug.ps1
-      - unlink fix-appveyor-matrix-bug.ps1
       - c:\cygwin\setup-x86.exe -q -C devel -C perl -P libcrypt-devel -P openssl-devel
       - set PATH=C:\cygwin\bin;C:\cygwin\usr\local\bin;%PATH%
 
@@ -59,11 +78,6 @@ for:
         - PERL_TYPE: cygwin64
 
     install:
-      - ps: Invoke-WebRequest https://raw.githubusercontent.com/skirmess/dzil-inc/master/bin/fix-appveyor-matrix-bug -OutFile fix-appveyor-matrix-bug.pl
-      - perl fix-appveyor-matrix-bug.pl > fix-appveyor-matrix-bug.ps1
-      - unlink fix-appveyor-matrix-bug.pl
-      - ps: .\fix-appveyor-matrix-bug.ps1
-      - unlink fix-appveyor-matrix-bug.ps1
       - c:\cygwin64\setup-x86_64.exe -q -C devel -C perl -P libcrypt-devel -P openssl-devel
       - set PATH=C:\cygwin64\bin;C:\cygwin64\usr\local\bin;%PATH%
 
@@ -73,30 +87,31 @@ for:
         - PERL_TYPE: strawberry
 
     install:
-      - ps: Invoke-WebRequest https://raw.githubusercontent.com/skirmess/dzil-inc/master/bin/fix-appveyor-matrix-bug -OutFile fix-appveyor-matrix-bug.pl
-      - perl fix-appveyor-matrix-bug.pl > fix-appveyor-matrix-bug.ps1
-      - unlink fix-appveyor-matrix-bug.pl
-      - ps: .\fix-appveyor-matrix-bug.ps1
-      - unlink fix-appveyor-matrix-bug.ps1
-      - if     defined PERL_VERSION cinst -y strawberryperl --version %PERL_VERSION%
-      - if not defined PERL_VERSION cinst -y strawberryperl
+      - ps: Invoke-WebRequest $env:STRAWBERRY_URL -OutFile strawberry.zip
+      - ps: Expand-Archive strawberry.zip -DestinationPath c:\Strawberry
+      - if exist c:\Strawberry\relocation.pl.bat c:\Strawberry\relocation.pl.bat
+      - erase strawberry.zip
       - set PATH=C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;C:\Strawberry\c\bin;%PATH%
 
 before_build:
+  - mv c:\mingw-w64 c:\mingw-w64.old
+  - mv c:\mingw c:\mingw.old
   - ps: systeminfo | Select-String "^OS Name", "^OS Version"
   - where perl
   - perl -V
   - ps: Invoke-WebRequest https://raw.githubusercontent.com/skirmess/dzil-inc/master/bin/check-ci-perl-version -OutFile check-ci-perl-version.pl
   - perl check-ci-perl-version.pl --appveyor
-  - unlink check-ci-perl-version.pl
+  - erase check-ci-perl-version.pl
   - ps: $env:make = perl -MConfig -e'print $Config{make}'
   - echo %make%
   - if not exist %make% where %make%
   - where gcc
   - gcc --version
+  - where g++
+  - g++ --version
   - ps: Invoke-WebRequest https://cpanmin.us/ -OutFile cpanm.pl
   - perl cpanm.pl App::cpanminus
-  - unlink cpanm.pl
+  - erase cpanm.pl
   - where cpanm
   - perl -S cpanm --version
   - mkdir C:\tmp
