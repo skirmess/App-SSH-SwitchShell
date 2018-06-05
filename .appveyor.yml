@@ -117,6 +117,8 @@ before_build:
   - mkdir C:\tmp
   - if     defined AUTHOR_TESTING perl -S cpanm --verbose --installdeps --notest --skip-satisfied --with-develop .
   - if not defined AUTHOR_TESTING perl -S cpanm --verbose --installdeps --notest --skip-satisfied .
+  - perl -S cpanm --verbose --notest --skip-satisfied App::ReportPrereqs
+  - perl -S report-prereqs
 
 build_script:
   - set PERL_USE_UNSAFE_INC=0

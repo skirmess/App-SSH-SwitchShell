@@ -102,6 +102,8 @@ install:
     else
         cpanm --verbose --installdeps --notest --skip-satisfied .
     fi
+  - cpanm --verbose --notest --skip-satisfied App::ReportPrereqs
+  - report-prereqs
 
 script:
   - PERL_USE_UNSAFE_INC=0
