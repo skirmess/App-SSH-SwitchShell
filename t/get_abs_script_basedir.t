@@ -7,7 +7,7 @@ use warnings;
 use Cwd;
 use File::Spec;
 
-use Test::More;
+use Test::More 0.88;
 
 use lib qw(.);
 

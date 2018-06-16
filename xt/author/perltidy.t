@@ -8,7 +8,7 @@ use warnings;
 
 use FindBin qw($RealBin);
 use Path::Tiny;
-use Test::More;
+use Test::More 0.88;
 use Test::PerlTidy;
 
 my @files;

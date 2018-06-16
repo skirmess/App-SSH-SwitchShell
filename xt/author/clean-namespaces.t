@@ -6,7 +6,7 @@ use warnings;
 
 # Automatically generated file; DO NOT EDIT.
 
-use Test::More;
+use Test::More 0.88;
 use Test::CleanNamespaces;
 
 if ( !Test::CleanNamespaces->find_modules() ) {

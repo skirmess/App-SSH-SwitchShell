@@ -8,7 +8,7 @@ use Capture::Tiny qw(capture);
 use Cwd;
 use File::Spec;
 
-use Test::More;
+use Test::More 0.88;
 use Test::MockModule;
 use Test::TempDir::Tiny;
 

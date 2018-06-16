@@ -9,7 +9,7 @@ use Cwd;
 use English qw( -no_match_vars );
 use File::Spec;
 
-use Test::More;
+use Test::More 0.88;
 use Test::MockModule;
 use Test::TempDir::Tiny;
 

@@ -7,7 +7,7 @@ use warnings;
 use Capture::Tiny qw(capture);
 use Cwd;
 
-use Test::More;
+use Test::More 0.88;
 use Test::TempDir::Tiny;
 
 use lib qw(.);

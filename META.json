@@ -40,7 +40,7 @@
          "requires" : {
             "Capture::Tiny" : "0",
             "Test::MockModule" : "0",
-            "Test::More" : "0",
+            "Test::More" : "0.88",
             "Test::TempDir::Tiny" : "0.017",
             "lib" : "0",
             "perl" : "5.006",
