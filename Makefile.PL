@@ -7,7 +7,7 @@ use 5.006;
 use ExtUtils::MakeMaker;
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "sshss - Use your preferred shell and own home directory for shared SSH accounts",
+  "ABSTRACT" => "use your preferred shell and own home directory for shared SSH accounts",
   "AUTHOR" => "Sven Kirmess <sven.kirmess\@kzone.ch>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => 0

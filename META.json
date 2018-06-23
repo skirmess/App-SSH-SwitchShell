@@ -1,5 +1,5 @@
 {
-   "abstract" : "sshss - Use your preferred shell and own home directory for shared SSH accounts",
+   "abstract" : "use your preferred shell and own home directory for shared SSH accounts",
    "author" : [
       "Sven Kirmess <sven.kirmess@kzone.ch>"
    ],
