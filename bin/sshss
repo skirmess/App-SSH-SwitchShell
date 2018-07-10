@@ -26,7 +26,7 @@ sub main {
     # Get the last component of the shell name.
     my $shell0 = ( File::Spec->splitpath($shell) )[2];
 
-    # If we have no command, execute the shell.  In this case, the shell
+    # If we have no command, execute the shell. In this case, the shell
     # name to be passed in argv[0] is preceded by '-' to indicate that
     # this is a login shell.
 
@@ -36,7 +36,7 @@ sub main {
         _exec { $shell } "-$shell0";
     }
     else {
-        # Execute the command using the user's shell.  This uses the -c
+        # Execute the command using the user's shell. This uses the -c
         # option to execute the command.
         _exec { $shell } $shell0, '-c', $ENV{SSH_ORIGINAL_COMMAND};
     }
@@ -60,8 +60,8 @@ sub _exec (&@) {
 }
 
 # Update the HOME env variable and change to the new home directory if we
-# are configured for a shared account. Otherwise do nothung because SSH
-# already ensures that HOME is configured correctly and we are chdir'd
+# are configured for a shared account. Otherwise do nothing because SSH
+# already ensures that HOME is configured correctly and we are chdird
 # into it.
 sub configure_home {
     my $myhome = get_abs_script_basedir();

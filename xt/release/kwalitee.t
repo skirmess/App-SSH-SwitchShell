@@ -6,10 +6,10 @@ use warnings;
 
 # Automatically generated file; DO NOT EDIT.
 
-use Test::More 0.88;
 use Test::Kwalitee 'kwalitee_ok';
+use Test::More 0.88;
+use XT::Util;
 
-# Module::CPANTS::Analyse does not find the LICENSE in scripts that don't end in .pl
-kwalitee_ok(qw{-has_license_in_source_file});
+kwalitee_ok( @{ __CONFIG__()->{tests} } );
 
 done_testing();

@@ -35,7 +35,7 @@ if ( -d 'lib' ) {
     }
 }
 
-for my $dir (qw(t xt)) {
+for my $dir ( grep { -d } qw(t xt) ) {
     my $it = path($dir)->iterator( { recurse => 1 } );
 
   TEST:

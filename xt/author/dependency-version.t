@@ -14,6 +14,9 @@ Test::RequiredMinimumDependencyVersion->new(
         # the done_testing sub was added on 0.88
         'Test::More' => '0.88',
 
+        # the skip argument was added in 0.003
+        'Test::Spelling::Comment' => '0.003',
+
         # the version pod page "strongly urges" us to use at least 0.77
         'version' => '0.77',
     },
