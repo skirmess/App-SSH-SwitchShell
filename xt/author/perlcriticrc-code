@@ -1,9 +1,3 @@
-[-Bangs::ProhibitNumberedNames]
-
-[InputOutput::RequireCheckedSyscalls]
-functions = :builtins
-exclude_functions = exec print say sleep
-
 [-Subroutines::ProhibitSubroutinePrototypes]
 
 [Variables::RequireLocalizedPunctuationVars]

@@ -53,6 +53,8 @@ for my $dir ( grep { -d } qw(t xt) ) {
     }
 }
 
+@files = grep { !m{ (?: [~] | [.]bak ) $ }xsm } @files;
+
 if ( !@files ) {
     plan skip_all => 'No files found to test.';
 }

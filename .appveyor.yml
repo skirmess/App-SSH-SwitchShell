@@ -115,9 +115,9 @@ before_build:
   - where cpanm
   - perl -S cpanm --version
   - mkdir C:\tmp
-  - if     defined AUTHOR_TESTING perl -S cpanm --verbose --installdeps --notest --skip-satisfied --with-develop .
-  - if not defined AUTHOR_TESTING perl -S cpanm --verbose --installdeps --notest --skip-satisfied .
-  - perl -S cpanm --verbose --notest --skip-satisfied App::ReportPrereqs
+  - if     defined AUTHOR_TESTING perl -S cpanm --verbose --installdeps --notest --with-develop .
+  - if not defined AUTHOR_TESTING perl -S cpanm --verbose --installdeps --notest .
+  - perl -S cpanm --verbose --notest App::ReportPrereqs
   - if     defined AUTHOR_TESTING perl -S report-prereqs --with-develop
   - if not defined AUTHOR_TESTING perl -S report-prereqs
 

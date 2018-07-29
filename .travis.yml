@@ -98,11 +98,11 @@ install:
   - |
     if [ -n "$AUTHOR_TESTING" ]
     then
-        cpanm --verbose --installdeps --notest --skip-satisfied --with-develop .
+        cpanm --verbose --installdeps --notest --with-develop .
     else
-        cpanm --verbose --installdeps --notest --skip-satisfied .
+        cpanm --verbose --installdeps --notest .
     fi
-  - cpanm --verbose --notest --skip-satisfied App::ReportPrereqs
+  - cpanm --verbose --notest App::ReportPrereqs
   - |
     if [ -n "$AUTHOR_TESTING" ]
     then

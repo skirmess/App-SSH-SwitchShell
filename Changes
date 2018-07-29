@@ -2,6 +2,7 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - Removed minimal dependency on Test::TempDir::Tiny 0.017
   - skip needs $how_many with Test::More < 1.302013_009
   - Removed autodie in tests
 
