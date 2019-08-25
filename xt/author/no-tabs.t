@@ -6,7 +6,9 @@ use 5.006;
 use strict;
 use warnings;
 
+use Test::More 0.88;
 use Test::NoTabs;
+use Test::XTFiles;
 use XT::Util;
 
 if ( __CONFIG__()->{':skip'} ) {
@@ -14,4 +16,8 @@ if ( __CONFIG__()->{':skip'} ) {
     exit 0;
 }
 
-all_perl_files_ok( grep { -d } qw( bin lib t xt ) );
+for my $file ( Test::XTFiles->new->all_perl_files() ) {
+    notabs_ok( $file, "No tabs in '$file'" );
+}
+
+done_testing();

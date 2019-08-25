@@ -17,35 +17,54 @@ git:
 matrix:
   include:
     - perl: '5.8.1'
+      dist: 'xenial'
 
     - perl: '5.8.2'
+      dist: 'xenial'
 
     - perl: '5.8'
+      dist: 'trusty'
 
     - perl: '5.10.0'
+      dist: 'xenial'
 
     - perl: '5.10'
+      dist: 'trusty'
 
     - perl: '5.12'
+      dist: 'trusty'
 
     - perl: '5.14'
+      dist: 'trusty'
 
     - perl: '5.16'
+      dist: 'trusty'
 
     - perl: '5.18'
+      dist: 'trusty'
 
     - perl: '5.18'
       env: AUTHOR_TESTING=1
       os: osx
 
     - perl: '5.20'
+      dist: 'trusty'
 
     - perl: '5.22'
+      dist: 'xenial'
 
     - perl: '5.24'
       env: AUTHOR_TESTING=1
+      dist: 'xenial'
 
     - perl: '5.26'
+      dist: 'xenial'
+
+    - perl: '5.28'
+      dist: 'xenial'
+
+    - perl: '5.30'
+      dist: 'xenial'
 
 before_install:
   - |

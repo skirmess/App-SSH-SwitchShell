@@ -7,6 +7,7 @@ use strict;
 use warnings;
 
 use Test::Pod 1.26;
+use Test::XTFiles;
 use XT::Util;
 
 if ( __CONFIG__()->{':skip'} ) {
@@ -14,4 +15,4 @@ if ( __CONFIG__()->{':skip'} ) {
     exit 0;
 }
 
-all_pod_files_ok( grep { -d } qw( bin lib t xt) );
+all_pod_files_ok( Test::XTFiles->new->all_perl_files() );

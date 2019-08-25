@@ -7,12 +7,13 @@ use strict;
 use warnings;
 
 use Test::More 0.88;
-use Test::Version 0.04 qw( version_all_ok ), {
+use Test::Version 0.04 qw( version_ok ), {
     consistent  => 1,
     has_version => 1,
     is_strict   => 0,
     multiple    => 0,
 };
+use Test::XTFiles;
 use XT::Util;
 
 if ( __CONFIG__()->{':skip'} ) {
@@ -20,5 +21,12 @@ if ( __CONFIG__()->{':skip'} ) {
     exit 0;
 }
 
-version_all_ok;
+FILE:
+for my $file ( Test::XTFiles->new->files() ) {
+    next FILE if $file->is_test;
+    next FILE if !$file->is_module && !$file->is_script;
+
+    version_ok( $file->name );
+}
+
 done_testing();

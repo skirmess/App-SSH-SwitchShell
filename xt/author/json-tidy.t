@@ -20,7 +20,7 @@ main();
 
 sub main {
     my $json = JSON::MaybeXS->new( pretty => 1 );
-    my $it = path('xt')->iterator( { recurse => 1 } );
+    my $it   = path('xt')->iterator( { recurse => 1 } );
 
     my $test_count = 0;
 
@@ -31,7 +31,7 @@ sub main {
 
         $test_count++;
 
-        my $content = $file->slurp;
+        my $content         = $file->slurp;
         my $content_decoded = eval { $json->decode($content) };
         if ( !defined $content_decoded ) {
             my $json_error = $@;

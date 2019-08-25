@@ -6,7 +6,7 @@ use 5.006;
 use strict;
 use warnings;
 
-use Test::Pod::Links;
+use Test::Pod::Links 0.003;
 use XT::Util;
 
 if ( __CONFIG__()->{':skip'} ) {
@@ -19,4 +19,4 @@ if ( exists $ENV{AUTOMATED_TESTING} ) {
     exit 0;
 }
 
-Test::Pod::Links->new->all_pod_files_ok( grep { -d } qw(bin lib t xt) );
+Test::Pod::Links->new->all_pod_files_ok;

@@ -6,7 +6,7 @@ use 5.006;
 use strict;
 use warnings;
 
-use Test::Spelling::Comment 0.003;
+use Test::Spelling::Comment 0.005;
 use XT::Util;
 
 if ( __CONFIG__()->{':skip'} ) {
@@ -19,10 +19,6 @@ if ( exists $ENV{AUTOMATED_TESTING} ) {
     exit 0;
 }
 
-my @files;
-push @files, grep { -d } qw( bin lib t/lib );
-push @files, glob q{ t/*.t xt/*.t xt/*/*.t };
-
 Test::Spelling::Comment->new(
     skip => [
         '^[#] vim: .*',
@@ -30,7 +26,7 @@ Test::Spelling::Comment->new(
         '[#][#] no critic [(][^)]+[)]',
         '(?i)http(?:s)?://[^\s]+',
     ],
-)->add_stopwords( <DATA>, @{ __CONFIG__()->{stopwords} } )->all_files_ok(@files);
+)->add_stopwords( <DATA>, @{ __CONFIG__()->{stopwords} } )->all_files_ok;
 
 __DATA__
 LinkCheck

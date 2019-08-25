@@ -15,8 +15,8 @@ require CPANPLUS;
 # directories to be able to find link targets in this project.
 use lib qw(bin lib blib);
 
-use Test::Pod;
 use Test::Pod::LinkCheck;
+use Test::XTFiles;
 use XT::Util;
 
 if ( __CONFIG__()->{':skip'} ) {
@@ -29,4 +29,4 @@ if ( exists $ENV{AUTOMATED_TESTING} ) {
     exit 0;
 }
 
-Test::Pod::LinkCheck->new->all_pod_ok( Test::Pod::all_pod_files( grep { -d } qw(bin lib t xt) ) );
+Test::Pod::LinkCheck->new->all_pod_ok( Test::XTFiles->new->all_files() );

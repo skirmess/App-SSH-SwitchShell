@@ -42,8 +42,8 @@ sub main {
     my $script_basedir;
     my @exec_args;
     my $sshss = Test::MockModule->new( 'App::SSH::SwitchShell', no_auto => 1 );
-    $sshss->mock( get_abs_script_basedir => sub { return $script_basedir } );
-    $sshss->mock( _exec => sub (&@) { @exec_args = @_; return; } );
+    $sshss->mock( get_abs_script_basedir => sub      { return $script_basedir } );
+    $sshss->mock( _exec                  => sub (&@) { @exec_args = @_; return; } );
 
     # Change to a different tempdir to see if the chdir functionality works
     my $basedir = tempdir();

@@ -7,7 +7,9 @@ use strict;
 use warnings;
 
 use Pod::Wordlist;
+use Test::More 0.88;
 use Test::Spelling 0.12;
+use Test::XTFiles;
 use XT::Util;
 
 if ( __CONFIG__()->{':skip'} ) {
@@ -23,7 +25,11 @@ if ( exists $ENV{AUTOMATED_TESTING} ) {
 add_stopwords(<DATA>);
 add_stopwords( @{ __CONFIG__()->{stopwords} } );
 
-all_pod_files_spelling_ok( grep { -d } qw( bin lib t xt ) );
+for my $file ( Test::XTFiles->new->all_files() ) {
+    pod_file_spelling_ok($file);
+}
+
+done_testing();
 __DATA__
 <sven.kirmess@kzone.ch>
 Kirmess

@@ -55,8 +55,16 @@ environment:
       STRAWBERRY_URL: http://strawberryperl.com/download/5.24.4.1/strawberry-perl-5.24.4.1-64bit.zip
 
     - PERL_TYPE: strawberry
-      PERL_VERSION: 5.26.2
-      STRAWBERRY_URL: http://strawberryperl.com/download/5.26.2.1/strawberry-perl-5.26.2.1-64bit.zip
+      PERL_VERSION: 5.26.3
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.26.3.1/strawberry-perl-5.26.3.1-64bit.zip
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.28.2
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.28.2.1/strawberry-perl-5.28.2.1-64bit.zip
+
+    - PERL_TYPE: strawberry
+      PERL_VERSION: 5.30.0
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.30.0.1/strawberry-perl-5.30.0.1-64bit.zip
 
 install:
   - ps: 'Write-Host "ERROR: Unknown Perl type ''$env:PERL_TYPE''"'
@@ -69,7 +77,7 @@ for:
         - PERL_TYPE: cygwin
 
     install:
-      - c:\cygwin\setup-x86.exe -q -C devel -C perl -P libcrypt-devel -P openssl-devel
+      - c:\cygwin\setup-x86.exe -q -C devel -C perl -P libcrypt-devel -P libssl-devel
       - set PATH=C:\cygwin\bin;C:\cygwin\usr\local\bin;%PATH%
 
   -
@@ -78,7 +86,7 @@ for:
         - PERL_TYPE: cygwin64
 
     install:
-      - c:\cygwin64\setup-x86_64.exe -q -C devel -C perl -P libcrypt-devel -P openssl-devel
+      - c:\cygwin64\setup-x86_64.exe -q -C devel -C perl -P libcrypt-devel -P libssl-devel
       - set PATH=C:\cygwin64\bin;C:\cygwin64\usr\local\bin;%PATH%
 
   -

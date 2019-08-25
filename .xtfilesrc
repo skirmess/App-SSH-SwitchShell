@@ -1,0 +1,10 @@
+# Automatically generated file; DO NOT EDIT.
+
+# load the default config
+[Default]
+
+# also check tests and the test helper modules, if present
+[Dirs]
+test = t
+test = xt
+module = t/lib

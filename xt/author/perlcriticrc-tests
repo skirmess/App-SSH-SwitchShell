@@ -1,5 +1,5 @@
 [ControlStructures::ProhibitPostfixControls]
-flowcontrol = BAIL_OUT skip
+flowcontrol = BAIL_OUT die skip
 
 [-Modules::ProhibitMultiplePackages]
 [-Modules::RequireExplicitInclusion]

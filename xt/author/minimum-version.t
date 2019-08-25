@@ -7,6 +7,8 @@ use strict;
 use warnings;
 
 use Test::MinimumVersion 0.008;
+use Test::XTFiles;
+use XT::Files;
 use XT::Util;
 
 if ( __CONFIG__()->{':skip'} ) {
@@ -14,4 +16,6 @@ if ( __CONFIG__()->{':skip'} ) {
     exit 0;
 }
 
-all_minimum_version_from_metayml_ok();
+XT::Files->instance->bin_file('Makefile.PL');
+
+all_minimum_version_from_metayml_ok( { paths => [ Test::XTFiles->new->all_perl_files() ] } );
