@@ -63,8 +63,8 @@ environment:
       STRAWBERRY_URL: http://strawberryperl.com/download/5.28.2.1/strawberry-perl-5.28.2.1-64bit.zip
 
     - PERL_TYPE: strawberry
-      PERL_VERSION: 5.30.0
-      STRAWBERRY_URL: http://strawberryperl.com/download/5.30.0.1/strawberry-perl-5.30.0.1-64bit.zip
+      PERL_VERSION: 5.30.3
+      STRAWBERRY_URL: http://strawberryperl.com/download/5.30.3.1/strawberry-perl-5.30.3.1-64bit.zip
 
 install:
   - ps: 'Write-Host "ERROR: Unknown Perl type ''$env:PERL_TYPE''"'

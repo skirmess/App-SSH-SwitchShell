@@ -66,6 +66,9 @@ matrix:
     - perl: '5.30'
       dist: 'xenial'
 
+    - perl: '5.32'
+      dist: 'xenial'
+
 before_install:
   - |
     case "${TRAVIS_OS_NAME}" in

@@ -4,7 +4,7 @@
       "Sven Kirmess <sven.kirmess@kzone.ch>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 6.012, CPAN::Meta::Converter version 2.150010",
+   "generated_by" : "Dist::Zilla version 6.015, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "freebsd"
    ],
@@ -68,6 +68,7 @@
    },
    "version" : "0.006",
    "x_generated_by_perl" : "v5.24.0",
-   "x_serialization_backend" : "Cpanel::JSON::XS version 3.0231"
+   "x_serialization_backend" : "Cpanel::JSON::XS version 3.0231",
+   "x_spdx_expression" : "BSD-2-Clause-FreeBSD"
 }
 
