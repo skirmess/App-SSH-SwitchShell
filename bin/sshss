@@ -12,12 +12,7 @@ use Cwd;
 use English qw(-no_match_vars);
 use File::Spec;
 
-sub _exec (&@);
-
-if ( !caller ) {
-    main();
-    exit 1;
-}
+main() if !caller;
 
 sub main {
     configure_home();
@@ -33,29 +28,15 @@ sub main {
     if ( !exists $ENV{SSH_ORIGINAL_COMMAND} ) {
 
         # Launch a login shell
-        _exec { $shell } "-$shell0";
+        exec {$shell} "-$shell0";
     }
     else {
         # Execute the command using the user's shell. This uses the -c
         # option to execute the command.
-        _exec { $shell } $shell0, '-c', $ENV{SSH_ORIGINAL_COMMAND};
+        exec {$shell} $shell0, '-c', $ENV{SSH_ORIGINAL_COMMAND};
     }
 
-    return;
-}
-
-# We have to run exec from a small wrapper function to be able to test this
-# script
-# https://stackoverflow.com/questions/44597021/how-do-you-test-exec-used-with-indirect-object-syntax
-sub _exec (&@) {
-    my ( $file, @argv ) = @_;
-    $file = $file->();
-
-    {
-        exec {$file} @argv;
-    }
-
-    print {*STDERR} "$ERRNO: $file\n";
+    print {*STDERR} "$!: $shell0\n";
     exit 1;
 }
 
@@ -82,7 +63,7 @@ sub configure_home {
     $ENV{HOME} = $myhome;
 
     if ( !chdir $myhome ) {
-        print {*STDERR} "Could not chdir to home '$myhome': $ERRNO";
+        print {*STDERR} "Could not chdir to home '$myhome': $!";
     }
 
     return;

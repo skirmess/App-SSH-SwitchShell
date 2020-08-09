@@ -15,6 +15,25 @@ use Test::TempDir::Tiny;
 
 use lib qw(.);
 
+our @exec_args;
+our @exit_args;
+
+package App::SSH::SwitchShell;
+
+use subs qw(exec exit);
+
+sub exec (&@) {
+    @main::exec_args = @_;
+    return;
+}
+
+sub exit {
+    @main::exit_args = @_;
+    return;
+}
+
+package main;
+
 main();
 
 sub main {
@@ -38,12 +57,10 @@ sub main {
     close $fh or BAIL_OUT("close $shell: $!");
     chmod 0755, $shell or BAIL_OUT("chomd 0755, $shell: $!");
 
-    # mock get_abs_script_basedir and _exec
+    # mock get_abs_script_basedir
     my $script_basedir;
-    my @exec_args;
     my $sshss = Test::MockModule->new( 'App::SSH::SwitchShell', no_auto => 1 );
-    $sshss->mock( get_abs_script_basedir => sub      { return $script_basedir } );
-    $sshss->mock( _exec                  => sub (&@) { @exec_args = @_; return; } );
+    $sshss->mock( get_abs_script_basedir => sub { return $script_basedir } );
 
     # Change to a different tempdir to see if the chdir functionality works
     my $basedir = tempdir();
@@ -60,15 +77,21 @@ sub main {
         local @ARGV = ($shell);
 
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::main() };
-        is( $result[0],  undef,   'main() returns undef (because we mocked _exec)' );
-        is( $stdout,     q{},     '... prints nothing to STDOUT' );
-        is( $stderr,     q{},     '... prints nothing to STDERR' );
+        is( $result[0], undef, 'main() returns undef (because we mocked _exec)' );
+        is( $stdout,    q{},   '... prints nothing to STDOUT' );
+
+        # prints only the error message because the mocked exec does return
+        my @stderr = split /\n/, $stderr;
+        is( scalar @stderr, 1, '... prints nothing to STDERR' );
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+
         is( $ENV{HOME},  $tmpdir, '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell,  '... SHELL environment variable is correctly set' );
         is( cwd(),       $tmpdir, '... cwd is correctly changed' );
         my $exec_file = ( shift @exec_args )->();
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
+        is_deeply( \@exit_args, [1],             '... exit 1 is called (because exec returned)' );
 
         _chdir($basedir);
     }
@@ -84,15 +107,21 @@ sub main {
         local @ARGV = ($shell);
 
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::main() };
-        is( $result[0],  undef,   'main() returns undef (because we mocked _exec)' );
-        is( $stdout,     q{},     '... prints nothing to STDOUT (because we mocked _exec)' );
-        is( $stderr,     q{},     '... prints nothing to STDERR' );
+        is( $result[0], undef, 'main() returns undef (because we mocked _exec)' );
+        is( $stdout,    q{},   '... prints nothing to STDOUT (because we mocked _exec)' );
+
+        # prints only the error message because the mocked exec does return
+        my @stderr = split /\n/, $stderr;
+        is( scalar @stderr, 1, '... prints nothing to STDERR' );
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+
         is( $ENV{HOME},  $tmpdir, '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell,  '... SHELL environment variable is correctly set' );
         is( cwd(),       $tmpdir, '... cwd is correctly changed' );
         my $exec_file = ( shift @exec_args )->();
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [ 'shell.pl', '-c', "$EXECUTABLE_NAME -v" ], '... with the correct arguments' );
+        is_deeply( \@exit_args, [1], '... exit 1 is called (because exec returned)' );
 
         _chdir($basedir);
     }
@@ -117,6 +146,7 @@ sub main {
         my $exec_file = ( shift @exec_args )->();
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
+        is_deeply( \@exit_args, [1],             '... exit 1 is called (because exec returned)' );
 
         _chdir($basedir);
     }
@@ -132,15 +162,21 @@ sub main {
         local @ARGV = ($shell);
 
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::main() };
-        is( $result[0],  undef,   'main() returns undef (because we mocked _exec)' );
-        is( $stdout,     q{},     '... prints nothing to STDOUT' );
-        is( $stderr,     q{},     '... prints nothing to STDERR' );
+        is( $result[0], undef, 'main() returns undef (because we mocked _exec)' );
+        is( $stdout,    q{},   '... prints nothing to STDOUT' );
+
+        # prints only the error message because the mocked exec does return
+        my @stderr = split /\n/, $stderr;
+        is( scalar @stderr, 1, '... prints nothing to STDERR' );
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+
         is( $ENV{HOME},  $tmpdir, '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell,  '... SHELL environment variable is correctly set' );
         is( cwd(),       $tmpdir, '... cwd is correctly changed' );
         my $exec_file = ( shift @exec_args )->();
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
+        is_deeply( \@exit_args, [1],             '... exit 1 is called (because exec returned)' );
 
         _chdir($basedir);
     }
@@ -166,13 +202,19 @@ sub main {
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::main() };
         is( $result[0], undef, 'main() returns undef (because we mocked _exec)' );
         is( $stdout,    q{},   '... prints nothing to STDOUT' );
-        is( $stderr,    q{},   '... prints nothing to STDERR' );
+
+        # prints only the error message because the mocked exec does return
+        my @stderr = split /\n/, $stderr;
+        is( scalar @stderr, 1, '... prints nothing to STDERR' );
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+
         is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell, '... SHELL environment variable is correctly set' );
         is( cwd(), File::Spec->catdir( $homedir, 'abc' ), '... cwd is correctly changed' );
         my $exec_file = ( shift @exec_args )->();
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
+        is_deeply( \@exit_args, [1],             '... exit 1 is called (because exec returned)' );
 
         _chdir($basedir);
     }
@@ -192,13 +234,19 @@ sub main {
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::main() };
         is( $result[0], undef, 'main() returns undef (because we mocked _exec)' );
         is( $stdout,    q{},   '... prints nothing to STDOUT' );
-        is( $stderr,    q{},   '... prints nothing to STDERR' );
+
+        # prints only the error message because the mocked exec does return
+        my @stderr = split /\n/, $stderr;
+        is( scalar @stderr, 1, '... prints nothing to STDERR' );
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+
         is( $ENV{HOME}, File::Spec->catdir( $homedir, 'abc' ), '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell, '... SHELL environment variable is correctly set' );
         is( cwd(), File::Spec->catdir( $homedir, 'abc' ), '... cwd is correctly changed' );
         my $exec_file = ( shift @exec_args )->();
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
+        is_deeply( \@exit_args, [1],             '... exit 1 is called (because exec returned)' );
 
         _chdir($basedir);
     }
@@ -218,13 +266,19 @@ sub main {
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::main() };
         is( $result[0], undef, 'main() returns undef (because we mocked _exec)' );
         is( $stdout,    q{},   '... prints nothing to STDOUT' );
-        is( $stderr,    q{},   '... prints nothing to STDERR' );
+
+        # prints only the error message because the mocked exec does return
+        my @stderr = split /\n/, $stderr;
+        is( scalar @stderr, 1, '... prints nothing to STDERR' );
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+
         is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell, '... SHELL environment variable is correctly set' );
         is( cwd(), File::Spec->catdir( $homedir, 'abc' ), '... cwd is correctly changed' );
         my $exec_file = ( shift @exec_args )->();
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
+        is_deeply( \@exit_args, [1],             '... exit 1 is called (because exec returned)' );
 
         _chdir($basedir);
     }
