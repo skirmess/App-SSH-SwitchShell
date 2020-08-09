@@ -39,7 +39,6 @@ on develop => sub {
     requires 'Perl::Critic::Policy::CodeLayout::RequireTrailingCommaAtNewline', '97';
     requires 'Perl::Critic::Policy::Compatibility::ConstantLeadingUnderscore', '97';
     requires 'Perl::Critic::Policy::Compatibility::ConstantPragmaHash', '97';
-    requires 'Perl::Critic::Policy::Compatibility::PerlMinimumVersionAndWhy', '97';
     requires 'Perl::Critic::Policy::Compatibility::ProhibitUnixDevNull', '97';
     requires 'Perl::Critic::Policy::Documentation::ProhibitAdjacentLinks', '97';
     requires 'Perl::Critic::Policy::Documentation::ProhibitBadAproposMarkup', '97';
@@ -65,6 +64,7 @@ on develop => sub {
     requires 'Perl::Critic::Policy::Freenode::LexicalForeachIterator', '0.032';
     requires 'Perl::Critic::Policy::Freenode::LoopOnHash', '0.032';
     requires 'Perl::Critic::Policy::Freenode::ModPerl', '0.032';
+    requires 'Perl::Critic::Policy::Freenode::MultidimensionalArrayEmulation', '0.032';
     requires 'Perl::Critic::Policy::Freenode::OpenArgs', '0.032';
     requires 'Perl::Critic::Policy::Freenode::OverloadOptions', '0.032';
     requires 'Perl::Critic::Policy::Freenode::POSIXImports', '0.032';
@@ -182,7 +182,6 @@ on develop => sub {
         requires 'Dist::Zilla::Plugin::MetaNoIndex';
         requires 'Dist::Zilla::Plugin::MetaProvides::Package';
         requires 'Dist::Zilla::Plugin::MetaYAML';
-        requires 'Dist::Zilla::Plugin::MinimumPerl', '1.006';
         requires 'Dist::Zilla::Plugin::NextRelease';
         requires 'Dist::Zilla::Plugin::PromptIfStale';
         requires 'Dist::Zilla::Plugin::PruneCruft';
@@ -203,6 +202,7 @@ on develop => sub {
         requires 'Dist::Zilla::Role::FileMunger';
         requires 'Dist::Zilla::Role::PluginBundle::Config::Slicer';
         requires 'Dist::Zilla::Role::PluginBundle::Easy';
+        requires 'Dist::Zilla::Role::PrereqSource';
         requires 'Dist::Zilla::Role::TestRunner';
         requires 'Dist::Zilla::Role::TextTemplate';
         requires 'Dist::Zilla::Types', '6.000';
@@ -220,6 +220,7 @@ on develop => sub {
         requires 'Module::Metadata';
         requires 'Moose', '0.99';
         requires 'Moose::Role';
+        requires 'Perl::MinimumVersion', '1.26';
         requires 'Scalar::Util';
         requires 'Term::ANSIColor';
         requires 'Text::Template';
