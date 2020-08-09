@@ -165,6 +165,7 @@ on develop => sub {
         requires 'Dist::Zilla::Plugin::FinderCode';
         requires 'Dist::Zilla::Plugin::Git::CheckFor::CorrectBranch';
         requires 'Dist::Zilla::Plugin::Git::CheckFor::MergeConflicts';
+        requires 'Dist::Zilla::Plugin::Git::Checkout';
         requires 'Dist::Zilla::Plugin::Git::Commit';
         requires 'Dist::Zilla::Plugin::Git::Contributors';
         requires 'Dist::Zilla::Plugin::Git::FilePermissions';
