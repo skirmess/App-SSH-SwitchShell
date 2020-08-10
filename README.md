@@ -8,7 +8,7 @@ Version 0.006
 
 # SYNOPSIS
 
-- **sshss** \[shell\]
+- **sshss** \[-h &lt;home>\] \[shell\]
 
 # DESCRIPTION
 
@@ -39,6 +39,15 @@ from `session.c` from OpenSSH portable.
 **sshss** uses no non-core modules.
 
 # OPTIONS
+
+- _home_
+
+    Specifies the directory to set as your home directory. sshss will set the
+    _HOME_ environment variale and change to this directory.
+
+    If this is not specified, and **sshss** is saved inside a `.ssh` directory
+    the parent of the `.ssh` directory is used as home directory. Otherwise
+    nothing is changed.
 
 - _shell_
 

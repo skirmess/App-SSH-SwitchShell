@@ -82,8 +82,10 @@ sub main {
 
         # prints only the error message because the mocked exec does return
         my @stderr = split /\n/, $stderr;
-        is( scalar @stderr, 1, '... prints nothing to STDERR' );
-        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+        is( scalar @stderr, 1, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
 
         is( $ENV{HOME},  $tmpdir, '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell,  '... SHELL environment variable is correctly set' );
@@ -112,8 +114,10 @@ sub main {
 
         # prints only the error message because the mocked exec does return
         my @stderr = split /\n/, $stderr;
-        is( scalar @stderr, 1, '... prints nothing to STDERR' );
-        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+        is( scalar @stderr, 1, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
 
         is( $ENV{HOME},  $tmpdir, '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell,  '... SHELL environment variable is correctly set' );
@@ -167,8 +171,10 @@ sub main {
 
         # prints only the error message because the mocked exec does return
         my @stderr = split /\n/, $stderr;
-        is( scalar @stderr, 1, '... prints nothing to STDERR' );
-        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+        is( scalar @stderr, 1, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
 
         is( $ENV{HOME},  $tmpdir, '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell,  '... SHELL environment variable is correctly set' );
@@ -205,8 +211,10 @@ sub main {
 
         # prints only the error message because the mocked exec does return
         my @stderr = split /\n/, $stderr;
-        is( scalar @stderr, 1, '... prints nothing to STDERR' );
-        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+        is( scalar @stderr, 1, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
 
         is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell, '... SHELL environment variable is correctly set' );
@@ -237,8 +245,10 @@ sub main {
 
         # prints only the error message because the mocked exec does return
         my @stderr = split /\n/, $stderr;
-        is( scalar @stderr, 1, '... prints nothing to STDERR' );
-        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+        is( scalar @stderr, 1, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
 
         is( $ENV{HOME}, File::Spec->catdir( $homedir, 'abc' ), '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell, '... SHELL environment variable is correctly set' );
@@ -269,12 +279,79 @@ sub main {
 
         # prints only the error message because the mocked exec does return
         my @stderr = split /\n/, $stderr;
-        is( scalar @stderr, 1, '... prints nothing to STDERR' );
-        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' );
+        is( scalar @stderr, 1, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
 
         is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is correctly set' );
         is( $ENV{SHELL}, $shell, '... SHELL environment variable is correctly set' );
         is( cwd(), File::Spec->catdir( $homedir, 'abc' ), '... cwd is correctly changed' );
+        my $exec_file = ( shift @exec_args )->();
+        is( $exec_file, $shell, '... the correct shell was run' );
+        is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
+        is_deeply( \@exit_args, [1],             '... exit 1 is called (because exec returned)' );
+
+        _chdir($basedir);
+    }
+
+    note('login shell, -h <home> <shell>');
+    {
+        local $ENV{HOME}  = $tmpdir;
+        local $ENV{SHELL} = '/bin/dummy';
+
+        _chdir($tmpdir);
+        $script_basedir = File::Spec->catdir( $tmpdir, 'myHOME' );
+        _mkdir($script_basedir);
+
+        local @ARGV = ( '-h', $script_basedir, $shell );
+
+        my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::main() };
+        is( $result[0], undef, 'main() returns undef (because we mocked _exec)' );
+        is( $stdout,    q{},   '... prints nothing to STDOUT' );
+
+        # prints only the error message because the mocked exec does return
+        my @stderr = split /\n/, $stderr;
+        is( scalar @stderr, 1, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
+
+        is( $ENV{HOME},  $script_basedir, '... HOME environment variable is correctly set' );
+        is( $ENV{SHELL}, $shell,          '... SHELL environment variable is correctly set' );
+        is( cwd(),       $script_basedir, '... cwd is correctly changed' );
+        my $exec_file = ( shift @exec_args )->();
+        is( $exec_file, $shell, '... the correct shell was run' );
+        is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );
+        is_deeply( \@exit_args, [1],             '... exit 1 is called (because exec returned)' );
+
+        _chdir($basedir);
+    }
+
+    note('login shell, -h <home> -- <shell>');
+    {
+        local $ENV{HOME}  = $tmpdir;
+        local $ENV{SHELL} = '/bin/dummy';
+
+        _chdir($tmpdir);
+        $script_basedir = File::Spec->catdir( $tmpdir, 'myHOME' );
+
+        local @ARGV = ( '-h', $script_basedir, '--', $shell );
+
+        my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::main() };
+        is( $result[0], undef, 'main() returns undef (because we mocked _exec)' );
+        is( $stdout,    q{},   '... prints nothing to STDOUT' );
+
+        # prints only the error message because the mocked exec does return
+        my @stderr = split /\n/, $stderr;
+        is( scalar @stderr, 1, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
+        like( $stderr[0], qr{\Q: shell.pl\E}, '... prints nothing to STDERR' )
+          or diag 'got stderr: ', explain \@stderr;
+
+        is( $ENV{HOME},  $script_basedir, '... HOME environment variable is correctly set' );
+        is( $ENV{SHELL}, $shell,          '... SHELL environment variable is correctly set' );
+        is( cwd(),       $script_basedir, '... cwd is correctly changed' );
         my $exec_file = ( shift @exec_args )->();
         is( $exec_file, $shell, '... the correct shell was run' );
         is_deeply( \@exec_args, [qw(-shell.pl)], '... with the correct arguments' );

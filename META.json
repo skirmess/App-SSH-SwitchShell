@@ -31,6 +31,7 @@
             "Cwd" : "0",
             "English" : "0",
             "File::Spec" : "0",
+            "Getopt::Long" : "0",
             "perl" : "5.006",
             "strict" : "0",
             "warnings" : "0"

@@ -11,11 +11,17 @@ package App::SSH::SwitchShell;
 use Cwd;
 use English qw(-no_match_vars);
 use File::Spec;
+use Getopt::Long;
 
 main() if !caller;
 
 sub main {
-    configure_home();
+    my $home_arg;
+    GetOptions(
+        'h=s' => \$home_arg,
+    );
+
+    configure_home($home_arg);
     my $shell = configure_shell();
 
     # Get the last component of the shell name.
@@ -41,16 +47,20 @@ sub main {
 }
 
 # Update the HOME env variable and change to the new home directory if we
-# are configured for a shared account. Otherwise do nothing because SSH
-# already ensures that HOME is configured correctly and we are chdird
-# into it.
+# are configured for a shared account or if a home dir was specified.
+# Otherwise do nothing because SSH already ensures that HOME is configured
+# correctly and we are chdird into it.
 sub configure_home {
-    my $myhome = get_abs_script_basedir();
+    my ($myhome) = @_;
 
-    my @dirs = File::Spec->splitdir($myhome);
-    return if $dirs[-1] ne '.ssh';
-    pop @dirs;
-    $myhome = File::Spec->catdir(@dirs);
+    if ( !defined $myhome ) {
+        $myhome = get_abs_script_basedir();
+
+        my @dirs = File::Spec->splitdir($myhome);
+        return if $dirs[-1] ne '.ssh';
+        pop @dirs;
+        $myhome = File::Spec->catdir(@dirs);
+    }
 
     if ( exists $ENV{HOME} && defined $ENV{HOME} && -d $ENV{HOME} ) {
         my $home = File::Spec->canonpath( $ENV{HOME} );
@@ -134,7 +144,7 @@ Version 0.006
 
 =over
 
-=item B<sshss> [shell]
+=item B<sshss> [-h <home>] [shell]
 
 =back
 
@@ -169,6 +179,15 @@ B<sshss> uses no non-core modules.
 =head1 OPTIONS
 
 =over
+
+=item I<home>
+
+Specifies the directory to set as your home directory. sshss will set the
+I<HOME> environment variale and change to this directory.
+
+If this is not specified, and B<sshss> is saved inside a F<.ssh> directory
+the parent of the F<.ssh> directory is used as home directory. Otherwise
+nothing is changed.
 
 =item I<shell>
 

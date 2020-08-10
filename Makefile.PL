@@ -23,6 +23,7 @@ my %WriteMakefileArgs = (
     "Cwd" => 0,
     "English" => 0,
     "File::Spec" => 0,
+    "Getopt::Long" => 0,
     "strict" => 0,
     "warnings" => 0
   },
@@ -46,6 +47,7 @@ my %FallbackPrereqs = (
   "Cwd" => 0,
   "English" => 0,
   "File::Spec" => 0,
+  "Getopt::Long" => 0,
   "Test::MockModule" => 0,
   "Test::More" => "0.88",
   "Test::TempDir::Tiny" => 0,

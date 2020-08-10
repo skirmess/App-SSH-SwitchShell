@@ -1,6 +1,7 @@
 requires 'Cwd';
 requires 'English';
 requires 'File::Spec';
+requires 'Getopt::Long';
 requires 'perl', '5.006';
 requires 'strict';
 requires 'warnings';
