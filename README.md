@@ -43,7 +43,7 @@ from `session.c` from OpenSSH portable.
 - _home_
 
     Specifies the directory to set as your home directory. sshss will set the
-    _HOME_ environment variale and change to this directory.
+    _HOME_ environment variable and change to this directory.
 
     If this is not specified, and **sshss** is saved inside a `.ssh` directory
     the parent of the `.ssh` directory is used as home directory. Otherwise

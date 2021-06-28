@@ -36,7 +36,9 @@ sub main {
         return @getpwuid_ref;
     };
 
-    {
+  SKIP: {
+        skip qq{File '$shell_from_getpwuid' is not executable - chmod 755 doesn't work as expected on this platform}, 1 if !-x $shell_from_getpwuid;
+
         local $ENV{SHELL} = '/bin/dummy';
         local @ARGV = ("$tmpdir/does_not_exist");
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_shell() };
@@ -51,7 +53,9 @@ sub main {
     close $fh or BAIL_OUT("Cannot write file $shell_1: $!");
 
     _chmod( 0644, $shell_1 );
-    {
+  SKIP: {
+        skip qq{File '$shell_1' is executable - chmod 644 doesn't work as expected on this platform}, 1 if -x $shell_1;
+
         local $ENV{SHELL} = '/bin/dummy';
         local @ARGV = ($shell_1);
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_shell() };
@@ -63,7 +67,7 @@ sub main {
 
     _chmod( 0755, $shell_1 );
   SKIP: {
-        skip "File '$shell_1' is not executable - this OS seems to require more then chmod 0755", 1 if !-x $shell_1;
+        skip qq{File '$shell_1' is not executable - chmod 755 doesn't work as expected on this platform}, 1 if !-x $shell_1;
 
         local $ENV{SHELL} = '/bin/dummy';
         local @ARGV = ($shell_1);
@@ -90,7 +94,9 @@ sub main {
     }
 
     _chmod( 0644, $shell_from_getpwuid );
-    {
+  SKIP: {
+        skip qq{File '$shell_from_getpwuid' is executable - chmod 644 doesn't work as expected on this platform}, 1 if -x $shell_from_getpwuid;
+
         local $ENV{SHELL} = '/bin/dummy';
         local @ARGV = ();
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_shell() };
@@ -101,7 +107,9 @@ sub main {
     }
 
     _chmod( 0644, $shell_1 );
-    {
+  SKIP: {
+        skip qq{File '$shell_1' is executable - chmod 644 doesn't work as expected on this platform}, 1 if -x $shell_1;
+
         local $ENV{SHELL} = '/bin/dummy';
         local @ARGV = ($shell_1);
         my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_shell() };

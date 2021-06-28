@@ -17,12 +17,6 @@ use lib qw(bin lib blib);
 
 use Test::Pod::LinkCheck;
 use Test::XTFiles;
-use XT::Util;
-
-if ( __CONFIG__()->{':skip'} ) {
-    print "1..0 # SKIP disabled\n";
-    exit 0;
-}
 
 if ( exists $ENV{AUTOMATED_TESTING} ) {
     print "1..0 # SKIP these tests during AUTOMATED_TESTING\n";

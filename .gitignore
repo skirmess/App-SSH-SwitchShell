@@ -4,5 +4,5 @@
 .build
 .perlcritic_package.yml
 App-SSH-SwitchShell-*
-dzil-inc
+dzil-bundle
 tmp

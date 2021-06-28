@@ -1,0 +1,888 @@
+name: test
+on: push
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shogo82148/actions-setup-perl@v1
+
+      - id: linux
+        run: |
+          use Actions::Core;
+          use version 0.77;
+
+          my $min_perl = '5.8.1';
+
+          sub perl {
+              my @perl =
+                grep { version->parse("v$_") >= version->parse('v5.12.0') }
+                grep { version->parse("v$_") >= version->parse("v$min_perl") } perl_versions( platform => 'linux' );
+
+              for my $v (qw(5.10.1 5.10.0 5.8.9)) {
+                  return @perl if version->parse("v$min_perl") > version->parse("v$v");
+                  push @perl, $v;
+              }
+
+              return @perl if version->parse("v$min_perl") == version->parse('v5.8.9');
+              return @perl, '5.8.2', '5.8.1' if version->parse("v$min_perl") <= version->parse('v5.8.1');
+              return @perl, $min_perl;
+          }
+
+          set_output( matrix => { perl => [ perl() ] } );
+        shell: perl {0}
+
+      - id: macos
+        run: |
+          use Actions::Core;
+
+          set_output( matrix => { perl => [ ( perl_versions( platform => 'darwin' ) )[0] ] } );
+        shell: perl {0}
+
+      - id: strawberry
+        run: |
+          use Actions::Core;
+          use version 0.77;
+
+          my $min_perl = '5.8.1';
+
+          sub perl {
+              my @perl =
+                grep { version->parse("v$_") >= version->parse("v$min_perl") } perl_versions( platform => 'win32', distribution => 'strawberry' );
+
+              return @perl;
+          }
+
+          set_output( matrix => { perl => [ perl() ] } );
+        shell: perl {0}
+
+    outputs:
+      linux: ${{ steps.linux.outputs.matrix }}
+      macos: ${{ steps.macos.outputs.matrix }}
+      strawberry: ${{ steps.strawberry.outputs.matrix }}
+
+  author:
+    name: Author Tests
+    runs-on: ubuntu-latest
+
+    env:
+      AUTOMATED_TESTING: 1
+      TAR_OPTIONS: --warning=no-unknown-keyword
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.event.repository.name }}
+
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: latest
+
+      - run: uname -a
+
+      - name: find perl
+        run: perl -e 'print qq{perl = $^X\n::set-output name=bin::$^X\n}'
+        id: perl
+
+      - name: perl -V
+        run: ${{ steps.perl.outputs.bin }} -V
+
+      - name: find make
+        run: |
+          make=$(which $(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{make}'))
+          echo "make = $make"
+          echo "::set-output name=bin::$make"
+        id: make
+
+      - name: gcc --version
+        run: |
+          which gcc
+          gcc --version
+
+      - name: g++ --version
+        run: |
+          which g++
+          g++ --version
+
+      - name: install cpanm
+        run: |
+          wget --no-check-certificate -O cpanm.pl https://cpanmin.us/
+          ${{ steps.perl.outputs.bin }} cpanm.pl --reinstall App::cpanminus
+          rm -f cpanm.pl
+
+      - name: installsitebin
+        run: |
+          installsitebin=$(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{installsitebin};')
+          echo "installsitebin = $installsitebin"
+          echo "::set-output name=path::$installsitebin"
+        id: installsitebin
+
+      - name: cpanm --version
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --version
+
+      - name: cpanm --installdeps --notest --with-develop .
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest --with-develop .
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs --with-develop
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: perl Makefile.PL
+        run: ${{ steps.perl.outputs.bin }} Makefile.PL
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make
+        run: ${{ steps.make.outputs.bin }}
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make test
+        run: ${{ steps.make.outputs.bin }} test
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - run: ${{ steps.installsitebin.outputs.path }}/prove -lr xt/author
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: author-tests
+          path: ~/.cpanm/work/*/build.log
+        if: failure()
+
+  linux:
+    name: Linux Perl ${{ matrix.perl }}
+    runs-on: ubuntu-latest
+    needs: matrix
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.matrix.outputs.linux) }}
+
+    env:
+      AUTOMATED_TESTING: 1
+      TAR_OPTIONS: --warning=no-unknown-keyword
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.event.repository.name }}
+
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+
+      - run: uname -a
+
+      - name: find perl
+        run: perl -e 'print qq{perl = $^X\n::set-output name=bin::$^X\n}'
+        id: perl
+
+      - name: perl -V
+        run: ${{ steps.perl.outputs.bin }} -V
+
+      - name: check perl version
+        run: |
+          my $perl = '${{ matrix.perl }}';
+          print "Perl (from matrix): $perl\n";
+          print "Perl:               $]\n";
+
+          die "Unable to parse Perl version\n" if $perl !~ m{ ^ ( [1-9][0-9]* ) [.] ( [0-9]+ ) [.] ( [0-9]+ ) $ }xsm;
+          die "We asked for Perl $perl but got $]\n" if $] ne sprintf '%i.%03i%03i', $1, $2, $3;
+          print "Perl $perl is requested and $] is installed. Good!\n";
+        shell: perl {0}
+
+      - name: find make
+        run: |
+          make=$(which $(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{make}'))
+          echo "make = $make"
+          echo "::set-output name=bin::$make"
+        id: make
+
+      - name: gcc --version
+        run: |
+          which gcc
+          gcc --version
+
+      - name: g++ --version
+        run: |
+          which g++
+          g++ --version
+
+      - name: install cpanm
+        run: |
+          wget --no-check-certificate -O cpanm.pl https://cpanmin.us/
+
+          if [[ ${{ matrix.perl }} == 5.10.0 ]]
+          then
+            ${{ steps.perl.outputs.bin }} cpanm.pl version@0.9912
+          fi
+
+          ${{ steps.perl.outputs.bin }} cpanm.pl --reinstall App::cpanminus
+          rm -f cpanm.pl
+
+      - name: installsitebin
+        run: |
+          installsitebin=$(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{installsitebin};')
+          echo "installsitebin = $installsitebin"
+          echo "::set-output name=path::$installsitebin"
+        id: installsitebin
+
+      - name: cpanm --version
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --version
+
+      - name: cpanm --installdeps --notest .
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: perl Makefile.PL
+        run: ${{ steps.perl.outputs.bin }} Makefile.PL
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make
+        run: ${{ steps.make.outputs.bin }}
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make test
+        run: ${{ steps.make.outputs.bin }} test
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: linux-perl_${{ matrix.perl }}
+          path: ~/.cpanm/work/*/build.log
+        if: failure()
+
+  macos-cellar:
+    name: macOS Cellar
+    runs-on: macos-latest
+
+    env:
+      AUTOMATED_TESTING: 1
+      TAR_OPTIONS: --warning=no-unknown-keyword
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.event.repository.name }}
+
+      - run: uname -a
+
+      - name: find perl
+        run: perl -e 'print qq{perl = $^X\n::set-output name=bin::$^X\n}'
+        id: perl
+
+      - name: perl -V
+        run: ${{ steps.perl.outputs.bin }} -V
+
+      - name: find make
+        run: |
+          make=$(which $(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{make}'))
+          echo "make = $make"
+          echo "::set-output name=bin::$make"
+        id: make
+
+      - name: gcc --version
+        run: |
+          which gcc
+          gcc --version
+
+      - name: g++ --version
+        run: |
+          which g++
+          g++ --version
+
+      - name: install cpanm
+        run: |
+          wget --no-check-certificate -O cpanm.pl https://cpanmin.us/
+          ${{ steps.perl.outputs.bin }} cpanm.pl --reinstall App::cpanminus
+          rm -f cpanm.pl
+
+      - name: installsitebin
+        run: |
+          installsitebin=$(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{installsitebin};')
+          echo "installsitebin = $installsitebin"
+          echo "::set-output name=path::$installsitebin"
+        id: installsitebin
+
+      - name: cpanm --version
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --version
+
+      - name: cpanm --installdeps --notest .
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: perl Makefile.PL
+        run: ${{ steps.perl.outputs.bin }} Makefile.PL
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make
+        run: ${{ steps.make.outputs.bin }}
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make test
+        run: ${{ steps.make.outputs.bin }} test
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: macos-cellar
+          path: ~/.cpanm/work/*/build.log
+        if: failure()
+
+  macos:
+    name: macOS Perl ${{ matrix.perl }}
+    runs-on: macos-latest
+    needs: matrix
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.matrix.outputs.macos) }}
+
+    env:
+      AUTOMATED_TESTING: 1
+      TAR_OPTIONS: --warning=no-unknown-keyword
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.event.repository.name }}
+
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+
+      - run: uname -a
+
+      - name: find perl
+        run: perl -e 'print qq{perl = $^X\n::set-output name=bin::$^X\n}'
+        id: perl
+
+      - name: perl -V
+        run: ${{ steps.perl.outputs.bin }} -V
+
+      - name: check perl version
+        run: |
+          my $perl = '${{ matrix.perl }}';
+          print "Perl (from matrix): $perl\n";
+          print "Perl:               $]\n";
+
+          die "Unable to parse Perl version\n" if $perl !~ m{ ^ ( [1-9][0-9]* ) [.] ( [0-9]+ ) [.] ( [0-9]+ ) $ }xsm;
+          die "We asked for Perl $perl but got $]\n" if $] ne sprintf '%i.%03i%03i', $1, $2, $3;
+          print "Perl $perl is requested and $] is installed. Good!\n";
+        shell: perl {0}
+
+      - name: find make
+        run: |
+          make=$(which $(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{make}'))
+          echo "make = $make"
+          echo "::set-output name=bin::$make"
+        id: make
+
+      - name: gcc --version
+        run: |
+          which gcc
+          gcc --version
+
+      - name: g++ --version
+        run: |
+          which g++
+          g++ --version
+
+      - name: install cpanm
+        run: |
+          wget --no-check-certificate -O cpanm.pl https://cpanmin.us/
+          ${{ steps.perl.outputs.bin }} cpanm.pl --reinstall App::cpanminus
+          rm -f cpanm.pl
+
+      - name: installsitebin
+        run: |
+          installsitebin=$(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{installsitebin};')
+          echo "installsitebin = $installsitebin"
+          echo "::set-output name=path::$installsitebin"
+        id: installsitebin
+
+      - name: cpanm --version
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --version
+
+      - name: cpanm --installdeps --notest .
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: perl Makefile.PL
+        run: ${{ steps.perl.outputs.bin }} Makefile.PL
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make
+        run: ${{ steps.make.outputs.bin }}
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make test
+        run: ${{ steps.make.outputs.bin }} test
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: macos-perl_${{ matrix.perl }}
+          path: ~/.cpanm/work/*/build.log
+        if: failure()
+
+  cygwin:
+    name: Cygwin ${{ matrix.platform }}
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ 'x86', 'x86_64' ]
+
+    env:
+      AUTOMATED_TESTING: 1
+      TAR_OPTIONS: --warning=no-unknown-keyword
+
+    defaults:
+      run:
+        shell: bash -o igncr {0}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.event.repository.name }}
+
+      - uses: cygwin/cygwin-install-action@master
+        with:
+          packages: >-
+            gcc-core
+            gcc-g++
+            git
+            libcrypt-devel
+            libssl-devel
+            make
+            perl
+            wget
+          platform: ${{ matrix.platform }}
+
+      - name: sysinfo
+        run: systeminfo | Select-String "^OS Name", "^OS Version"
+        shell: powershell
+
+      - name: find perl
+        run: perl -e 'print qq{perl = $^X\n::set-output name=bin::$^X\n}'
+        env:
+          PATH: /usr/local/bin:/usr/bin
+        id: perl
+
+      - name: perl -V
+        run: ${{ steps.perl.outputs.bin }} -V
+        env:
+          PATH: /usr/local/bin:/usr/bin
+
+      - name: find make
+        run: |
+          make=$(which $(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{make}'))
+          echo "make = $make"
+          echo "::set-output name=bin::$make"
+        env:
+          PATH: /usr/local/bin:/usr/bin
+        id: make
+
+      - name: gcc --version
+        run: |
+          which gcc
+          gcc --version
+        env:
+          PATH: /usr/local/bin:/usr/bin
+
+      - name: g++ --version
+        run: |
+          which g++
+          g++ --version
+        env:
+          PATH: /usr/local/bin:/usr/bin
+
+      - name: install cpanm
+        run: |
+          wget --no-check-certificate -O cpanm.pl https://cpanmin.us/
+          ${{ steps.perl.outputs.bin }} cpanm.pl --reinstall App::cpanminus
+          rm -f cpanm.pl
+        env:
+          PATH: /usr/local/bin:/usr/bin
+
+      - name: installsitebin
+        run: |
+          installsitebin=$(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{installsitebin};')
+          echo "installsitebin = $installsitebin"
+          echo "::set-output name=path::$installsitebin"
+        env:
+          PATH: /usr/local/bin:/usr/bin
+        id: installsitebin
+
+      - name: cpanm --version
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --version
+        env:
+          PATH: /usr/local/bin:/usr/bin
+
+      - name: cpanm --installdeps --notest .
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PATH: /usr/local/bin:/usr/bin
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+        env:
+          PATH: /usr/local/bin:/usr/bin
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PATH: /usr/local/bin:/usr/bin
+
+      - name: perl Makefile.PL
+        run: ${{ steps.perl.outputs.bin }} Makefile.PL
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PATH: /usr/local/bin:/usr/bin
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make
+        run: ${{ steps.make.outputs.bin }}
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PATH: /usr/local/bin:/usr/bin
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make test
+        run: ${{ steps.make.outputs.bin }} test
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PATH: /usr/local/bin:/usr/bin
+          PERL_USE_UNSAFE_INC: 0
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: cygwin-${{ matrix.platform }}
+          path: c:/cygwin/home/runneradmin/.cpanm/work/*/build.log
+        if: failure()
+
+  strawberry:
+    name: Strawberry ${{ matrix.perl }}
+    runs-on: windows-latest
+    needs: matrix
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.matrix.outputs.strawberry) }}
+
+    env:
+      AUTOMATED_TESTING: 1
+      TAR_OPTIONS: --warning=no-unknown-keyword
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.event.repository.name }}
+
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+          distribution: strawberry
+
+      - name: sysinfo
+        run: systeminfo | Select-String "^OS Name", "^OS Version"
+
+      - name: find perl
+        run: perl -e 'print qq{perl = $^X\n::set-output name=bin::$^X\n}'
+        id: perl
+
+      - name: perl -V
+        run: ${{ steps.perl.outputs.bin }} -V
+
+      - name: check perl version
+        run: |
+          my $perl = '${{ matrix.perl }}';
+          print "Perl (from matrix): $perl\n";
+          print "Perl:               $]\n";
+
+          die "Unable to parse Perl version\n" if $perl !~ m{ ^ ( [1-9][0-9]* ) [.] ( [0-9]+ ) [.] ( [0-9]+ ) $ }xsm;
+          die "We asked for Perl $perl but got $]\n" if $] ne sprintf '%i.%03i%03i', $1, $2, $3;
+          print "Perl $perl is requested and $] is installed. Good!\n";
+        shell: perl {0}
+
+      - name: find make
+        run: |
+          $make = ${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{make}'
+          $make = (Get-Command $make | select -first 1).path
+          echo "make = $make"
+          echo "::set-output name=bin::$make"
+        id: make
+
+      - name: find home
+        run: |
+          $homedir = perl -e 'print $ENV{HOME} || eval { require File::HomeDir; File::HomeDir->my_home } || join(q{}, @ENV{qw(HOMEDRIVE HOMEPATH)})'
+          echo "home = $homedir"
+          echo "::set-output name=path::$homedir"
+        id: home
+
+      - name: gcc --version
+        run: |
+          (Get-Command gcc | select -first 1).path
+          gcc --version
+
+      - name: g++ --version
+        run: |
+          (Get-Command g++ | select -first 1).path
+          g++ --version
+
+      - name: install cpanm
+        run: |
+          Invoke-WebRequest https://cpanmin.us/ -OutFile cpanm.pl
+          ${{ steps.perl.outputs.bin }} cpanm.pl --reinstall App::cpanminus
+          erase cpanm.pl
+
+      - name: installsitebin
+        run: |
+          $installsitebin = ${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{installsitebin};'
+          echo "installsitebin = $installsitebin"
+          echo "::set-output name=path::$installsitebin"
+        id: installsitebin
+
+      - name: cpanm --version
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\cpanm --version
+
+      - name: cpanm --installdeps --notest .
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\cpanm --verbose --installdeps --notest .
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\cpanm --verbose --notest App::ReportPrereqs
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\report-prereqs
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: perl Makefile.PL
+        run: ${{ steps.perl.outputs.bin }} Makefile.PL
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make
+        run: ${{ steps.make.outputs.bin }}
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make test
+        run: ${{ steps.make.outputs.bin }} test
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: strawberry-perl_${{ matrix.perl }}
+          path: ${{ steps.home.outputs.path }}/.cpanm/work/*/build.log
+        if: failure()
+
+  wsl1:
+    name: WSL1 ${{ matrix.distribution }}
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - distribution: 'Debian'
+            packages: >-
+              g++
+              gcc
+              git
+              libio-socket-ssl-perl
+              liblwp-protocol-https-perl
+              libnet-ssleay-perl
+              libperl-dev
+              make
+              wget
+          - distribution: 'openSUSE-Leap-15.2'
+            packages: >-
+              gcc
+              gcc-c++
+              git
+              make
+              perl-IO-Socket-SSL
+              perl-Net-SSLeay
+              which
+          - distribution: 'Ubuntu-16.04'
+            packages: >-
+              g++
+              gcc
+              libio-socket-ssl-perl
+              libnet-ssleay-perl
+              make
+          - distribution: 'Ubuntu-18.04'
+            packages: >-
+              g++
+              gcc
+              libio-socket-ssl-perl
+              libnet-ssleay-perl
+              make
+          - distribution: 'Ubuntu-20.04'
+            packages: >-
+              g++
+              gcc
+              libio-socket-ssl-perl
+              libnet-ssleay-perl
+              make
+
+    env:
+      AUTOMATED_TESTING: 1
+      TAR_OPTIONS: --warning=no-unknown-keyword
+
+    defaults:
+      run:
+        shell: wsl-bash {0}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.event.repository.name }}
+
+      - uses: Vampire/setup-wsl@v1
+        with:
+          distribution: ${{ matrix.distribution }}
+          additional-packages: ${{ matrix.packages }}
+
+      - name: sysinfo
+        run: systeminfo | Select-String "^OS Name", "^OS Version"
+        shell: powershell
+
+      - name: find perl
+        run: perl -e 'print qq{perl = $^X\n::set-output name=bin::$^X\n}'
+        id: perl
+
+      - name: perl -V
+        run: ${{ steps.perl.outputs.bin }} -V
+
+      - name: find make
+        run: |
+          make=$(which $(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{make}'))
+          echo "make = $make"
+          echo "::set-output name=bin::$make"
+        id: make
+
+      - name: gcc --version
+        run: |
+          which gcc
+          gcc --version
+
+      - name: g++ --version
+        run: |
+          which g++
+          g++ --version
+
+      - name: redirect cpanm log files
+        run: |
+          mkdir /mnt/c/Users/runneradmin/.cpanm
+          rm -rf ~/.cpanm
+          ln -s /mnt/c/Users/runneradmin/.cpanm ~/.cpanm
+
+      - name: install cpanm
+        run: |
+          wget --no-check-certificate -O cpanm.pl https://cpanmin.us/
+          ${{ steps.perl.outputs.bin }} cpanm.pl --reinstall App::cpanminus
+          rm -f cpanm.pl
+
+      - name: installsitebin
+        run: |
+          installsitebin=$(${{ steps.perl.outputs.bin }} -MConfig -e 'print $Config{installsitebin};')
+          echo "installsitebin = $installsitebin"
+          echo "::set-output name=path::$installsitebin"
+        id: installsitebin
+
+      - name: cpanm --version
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --version
+
+      - name: cpanm --installdeps --notest .
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs
+        working-directory: ${{ github.event.repository.name }}
+
+      - name: perl Makefile.PL
+        run: ${{ steps.perl.outputs.bin }} Makefile.PL
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make
+        run: ${{ steps.make.outputs.bin }}
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - name: make test
+        run: ${{ steps.make.outputs.bin }} test
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PERL_USE_UNSAFE_INC: 0
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: wsl1-${{ matrix.distribution }}
+          path: ~/.cpanm/work/*/build.log
+        if: failure()

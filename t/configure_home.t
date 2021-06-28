@@ -108,9 +108,9 @@ sub main {
             local $ENV{HOME} = $homelnk;
 
             my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
-            is( $result[0], undef, 'configure_home() returns undef' );
-            is( $stdout,    q{},   '... prints nothing to STDOUT' );
-            is( $stderr,    q{},   '... prints nothing to STDERR' );
+            is( $result[0], undef,                                 'configure_home() returns undef' );
+            is( $stdout,    q{},                                   '... prints nothing to STDOUT' );
+            is( $stderr,    q{},                                   '... prints nothing to STDERR' );
             is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is set correct with symlink' );
             is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
 
@@ -126,9 +126,9 @@ sub main {
             $script_basedir = File::Spec->catdir( $homedir, 'abc', '.ssh' );
 
             my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
-            is( $result[0], undef, 'configure_home() returns undef' );
-            is( $stdout,    q{},   '... prints nothing to STDOUT' );
-            is( $stderr,    q{},   '... prints nothing to STDERR' );
+            is( $result[0], undef,                                 'configure_home() returns undef' );
+            is( $stdout,    q{},                                   '... prints nothing to STDOUT' );
+            is( $stderr,    q{},                                   '... prints nothing to STDERR' );
             is( $ENV{HOME}, File::Spec->catdir( $homedir, 'abc' ), '... HOME environment variable is set correct with symlink' );
             is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
 
@@ -144,9 +144,9 @@ sub main {
             $script_basedir = File::Spec->catdir( $homelnk, 'abc', '.ssh' );
 
             my ( $stdout, $stderr, @result ) = capture { App::SSH::SwitchShell::configure_home() };
-            is( $result[0], undef, 'configure_home() returns undef' );
-            is( $stdout,    q{},   '... prints nothing to STDOUT' );
-            is( $stderr,    q{},   '... prints nothing to STDERR' );
+            is( $result[0], undef,                                 'configure_home() returns undef' );
+            is( $stdout,    q{},                                   '... prints nothing to STDOUT' );
+            is( $stderr,    q{},                                   '... prints nothing to STDERR' );
             is( $ENV{HOME}, File::Spec->catdir( $homelnk, 'abc' ), '... HOME environment variable is set correct with symlink' );
             is( cwd(),      File::Spec->catdir( $homedir, 'abc' ), '... cwd is changed correct and does not use symlink (unfortunately)' );
 

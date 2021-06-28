@@ -1,3 +1,6 @@
+[ControlStructures::ProhibitPostfixControls]
+flowcontrol = main
+
 [-Subroutines::ProhibitSubroutinePrototypes]
 
 [Variables::RequireLocalizedPunctuationVars]

@@ -3,3 +3,7 @@ flowcontrol = BAIL_OUT die skip
 
 [-Modules::ProhibitMultiplePackages]
 [-Modules::RequireExplicitInclusion]
+[-RegularExpressions::RequireDotMatchAnything]
+[-RegularExpressions::RequireExtendedFormatting]
+[-RegularExpressions::RequireLineBoundaryMatching]
+[-Variables::ProhibitPackageVars]

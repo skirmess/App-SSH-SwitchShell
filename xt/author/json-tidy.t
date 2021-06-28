@@ -9,12 +9,6 @@ use warnings;
 use JSON::MaybeXS ();
 use Path::Tiny;
 use Test2::V0;
-use XT::Util;
-
-if ( __CONFIG__()->{':skip'} ) {
-    print "1..0 # SKIP disabled\n";
-    exit 0;
-}
 
 main();
 

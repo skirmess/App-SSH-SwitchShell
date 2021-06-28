@@ -183,7 +183,7 @@ B<sshss> uses no non-core modules.
 =item I<home>
 
 Specifies the directory to set as your home directory. sshss will set the
-I<HOME> environment variale and change to this directory.
+I<HOME> environment variable and change to this directory.
 
 If this is not specified, and B<sshss> is saved inside a F<.ssh> directory
 the parent of the F<.ssh> directory is used as home directory. Otherwise

@@ -14,12 +14,6 @@ use Test::Version 0.04 qw( version_ok ), {
     multiple    => 0,
 };
 use Test::XTFiles;
-use XT::Util;
-
-if ( __CONFIG__()->{':skip'} ) {
-    print "1..0 # SKIP disabled\n";
-    exit 0;
-}
 
 FILE:
 for my $file ( Test::XTFiles->new->files() ) {

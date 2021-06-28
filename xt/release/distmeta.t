@@ -7,11 +7,5 @@ use strict;
 use warnings;
 
 use Test::CPAN::Meta;
-use XT::Util;
-
-if ( __CONFIG__()->{':skip'} ) {
-    print "1..0 # SKIP disabled\n";
-    exit 0;
-}
 
 meta_yaml_ok();

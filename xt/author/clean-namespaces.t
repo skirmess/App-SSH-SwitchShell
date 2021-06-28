@@ -10,13 +10,7 @@ use Module::Info;
 use Test::CleanNamespaces;
 use Test::XTFiles;
 use Test2::V0;
-use XT::Util;
 use lib ();
-
-if ( __CONFIG__()->{':skip'} ) {
-    print "1..0 # SKIP disabled\n";
-    exit 0;
-}
 
 my @files = Test::XTFiles->new->all_module_files;
 if ( !@files ) {

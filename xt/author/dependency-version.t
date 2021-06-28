@@ -7,12 +7,6 @@ use strict;
 use warnings;
 
 use Test::RequiredMinimumDependencyVersion 0.003;
-use XT::Util;
-
-if ( __CONFIG__()->{':skip'} ) {
-    print "1..0 # SKIP disabled\n";
-    exit 0;
-}
 
 Test::RequiredMinimumDependencyVersion->new(
     module => {

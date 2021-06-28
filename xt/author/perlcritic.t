@@ -6,18 +6,12 @@ use 5.006;
 use strict;
 use warnings;
 
-use FindBin qw($RealBin);
+use Path::Tiny;
 use Perl::Critic::MergeProfile;
 use Perl::Critic;
 use Test::Perl::Critic::XTFiles;
-use XT::Util;
 
-if ( __CONFIG__()->{':skip'} ) {
-    print "1..0 # SKIP disabled\n";
-    exit 0;
-}
-
-my $rc_file = "$RealBin/perlcriticrc";
+my $rc_file = path(__FILE__)->parent->child('perlcriticrc')->stringify;
 die "File '$rc_file' not found" if !-f $rc_file;
 
 my $critic = Test::Perl::Critic::XTFiles->new( critic => Perl::Critic->new( -profile => $rc_file ) );
