@@ -1,5 +1,5 @@
 [ControlStructures::ProhibitPostfixControls]
-flowcontrol = main
+flowcontrol = croak main
 
 [-Subroutines::ProhibitSubroutinePrototypes]
 
