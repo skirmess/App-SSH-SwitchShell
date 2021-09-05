@@ -4,14 +4,18 @@ use 5.006;
 use strict;
 use warnings;
 
-use Capture::Tiny qw(capture);
-use Cwd;
-use English qw( -no_match_vars );
-use File::Spec;
-
 use Test::More 0.88;
 use Test::MockModule;
-use Test::TempDir::Tiny;
+
+use Cwd;
+use File::Basename ();
+use File::Spec     ();
+use lib File::Spec->catdir( File::Basename::dirname( Cwd::abs_path __FILE__ ), 'lib' );
+
+use Local::Test::TempDir qw(tempdir);
+
+use Capture::Tiny qw(capture);
+use English qw( -no_match_vars );
 
 use lib qw(.);
 

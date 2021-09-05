@@ -6,10 +6,10 @@ use 5.006;
 use strict;
 use warnings;
 
-# CPANPLUS is used by Test::Pod::LinkCheck but is not a dependency. The
-# require on CPANPLUS is only here for dzil to pick it up and add it as a
+# CPAN is used by Test::Pod::LinkCheck but is not a dependency. The
+# require on CPAN is only here for dzil to pick it up and add it as a
 # develop dependency to the cpanfile.
-require CPANPLUS;
+require CPAN;
 
 # Test::Pod::LinkCheck checks for link targets in @INC. We have to add these
 # directories to be able to find link targets in this project.
@@ -23,4 +23,7 @@ if ( exists $ENV{AUTOMATED_TESTING} ) {
     exit 0;
 }
 
-Test::Pod::LinkCheck->new->all_pod_ok( Test::XTFiles->new->all_files() );
+Test::Pod::LinkCheck->new(
+    cpan_backend      => 'CPAN',
+    cpan_backend_auto => 0,
+)->all_pod_ok( Test::XTFiles->new->all_files() );

@@ -6,14 +6,14 @@ use 5.006;
 use strict;
 use warnings;
 
-use JSON::MaybeXS ();
+use JSON::PP ();
 use Path::Tiny;
 use Test2::V0;
 
 main();
 
 sub main {
-    my $json = JSON::MaybeXS->new( pretty => 1 );
+    my $json = JSON::PP->new->pretty(1)->canonical(1);
     my $it   = path('xt')->iterator( { recurse => 1 } );
 
     my $test_count = 0;

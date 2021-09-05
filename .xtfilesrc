@@ -6,5 +6,10 @@
 # also check tests and the test helper modules, if present
 [Dirs]
 test = t
-test = xt
 module = t/lib
+test = xt
+module = xt/smoke/lib
+
+# and check our Makefile.PL
+[Files]
+bin = Makefile.PL
