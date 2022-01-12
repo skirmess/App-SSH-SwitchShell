@@ -27,6 +27,10 @@ no_index:
   directory:
     - t
     - xt
+provides:
+  App::SSH::SwitchShell:
+    file: bin/sshss
+    version: '0.006'
 requires:
   Cwd: '0'
   English: '0'
