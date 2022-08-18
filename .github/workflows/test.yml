@@ -818,13 +818,6 @@ jobs:
               libio-socket-ssl-perl
               libnet-ssleay-perl
               make
-          - distribution: 'Ubuntu-22.04'
-            packages: >-
-              g++
-              gcc
-              libio-socket-ssl-perl
-              libnet-ssleay-perl
-              make
 
     env:
       TAR_OPTIONS: --warning=no-unknown-keyword
