@@ -6,7 +6,7 @@
    "dynamic_config" : 0,
    "generated_by" : "Dist::Zilla, CPAN::Meta::Converter",
    "license" : [
-      "freebsd"
+      "open_source"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
@@ -41,10 +41,11 @@
          "requires" : {
             "Capture::Tiny" : "0",
             "Carp" : "0",
-            "Exporter" : "5.57",
+            "Exporter" : "0",
             "File::Basename" : "0",
-            "File::Path" : "0",
-            "Test::MockModule" : "0",
+            "File::Path" : "2.07",
+            "File::Spec::Functions" : "0",
+            "Test::MockModule" : "0.14",
             "Test::More" : "0.88",
             "lib" : "0",
             "perl" : "5.006",
@@ -70,7 +71,6 @@
          "web" : "https://github.com/skirmess/App-SSH-SwitchShell"
       }
    },
-   "version" : "0.006",
-   "x_spdx_expression" : "BSD-2-Clause-FreeBSD"
+   "version" : "0.006"
 }
 

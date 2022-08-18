@@ -3,8 +3,6 @@ name: test
 on:
   push:
   pull_request:
-  schedule:
-    - cron:  '5 7 11 * *'
 
 jobs:
   matrix:
@@ -130,13 +128,6 @@ jobs:
         env:
           AUTOMATED_TESTING: 1
 
-      - name: cpanm --notest App::ReportPrereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
-
-      - name: report-prereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs --with-develop
-        working-directory: ${{ github.event.repository.name }}
-
       - name: perl Makefile.PL
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
         working-directory: ${{ github.event.repository.name }}
@@ -162,6 +153,15 @@ jobs:
         env:
           AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+        if: always()
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs --with-develop
+        working-directory: ${{ github.event.repository.name }}
+        if: always()
 
       - uses: actions/upload-artifact@v2
         with:
@@ -251,19 +251,11 @@ jobs:
 
       - name: cpanm --installdeps --notest .
         run: |
-          mv cpanfile .cpanfile.disabled
+          rm -f cpanfile
           ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
-          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
         env:
           AUTOMATED_TESTING: 1
-
-      - name: cpanm --notest App::ReportPrereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
-
-      - name: report-prereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs
-        working-directory: ${{ github.event.repository.name }}
 
       - name: perl Makefile.PL
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
@@ -284,6 +276,15 @@ jobs:
         env:
           AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+        if: always()
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs --meta MYMETA.json
+        working-directory: ${{ github.event.repository.name }}
+        if: always()
 
       - uses: actions/upload-artifact@v2
         with:
@@ -347,19 +348,11 @@ jobs:
 
       - name: cpanm --installdeps --notest .
         run: |
-          mv cpanfile .cpanfile.disabled
+          rm -f cpanfile
           ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
-          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
         env:
           AUTOMATED_TESTING: 1
-
-      - name: cpanm --notest App::ReportPrereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
-
-      - name: report-prereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs
-        working-directory: ${{ github.event.repository.name }}
 
       - name: perl Makefile.PL
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
@@ -380,6 +373,15 @@ jobs:
         env:
           AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+        if: always()
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs --meta MYMETA.json
+        working-directory: ${{ github.event.repository.name }}
+        if: always()
 
       - uses: actions/upload-artifact@v2
         with:
@@ -463,19 +465,11 @@ jobs:
 
       - name: cpanm --installdeps --notest .
         run: |
-          mv cpanfile .cpanfile.disabled
+          rm -f cpanfile
           ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
-          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
         env:
           AUTOMATED_TESTING: 1
-
-      - name: cpanm --notest App::ReportPrereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
-
-      - name: report-prereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs
-        working-directory: ${{ github.event.repository.name }}
 
       - name: perl Makefile.PL
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
@@ -496,6 +490,15 @@ jobs:
         env:
           AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+        if: always()
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs --meta MYMETA.json
+        working-directory: ${{ github.event.repository.name }}
+        if: always()
 
       - uses: actions/upload-artifact@v2
         with:
@@ -599,23 +602,11 @@ jobs:
 
       - name: cpanm --installdeps --notest .
         run: |
-          mv cpanfile .cpanfile.disabled
+          rm -f cpanfile
           ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
-          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
         env:
           AUTOMATED_TESTING: 1
-          PATH: /usr/local/bin:/usr/bin
-
-      - name: cpanm --notest App::ReportPrereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
-        env:
-          PATH: /usr/local/bin:/usr/bin
-
-      - name: report-prereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs
-        working-directory: ${{ github.event.repository.name }}
-        env:
           PATH: /usr/local/bin:/usr/bin
 
       - name: perl Makefile.PL
@@ -640,6 +631,19 @@ jobs:
           AUTOMATED_TESTING: 1
           PATH: /usr/local/bin:/usr/bin
           PERL_USE_UNSAFE_INC: 0
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+        env:
+          PATH: /usr/local/bin:/usr/bin
+        if: always()
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs --meta MYMETA.json
+        working-directory: ${{ github.event.repository.name }}
+        env:
+          PATH: /usr/local/bin:/usr/bin
+        if: always()
 
       - uses: actions/upload-artifact@v2
         with:
@@ -733,19 +737,11 @@ jobs:
 
       - name: cpanm --installdeps --notest .
         run: |
-          mv cpanfile .cpanfile.disabled
+          rm -Force cpanfile
           ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\cpanm --verbose --installdeps --notest .
-          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
         env:
           AUTOMATED_TESTING: 1
-
-      - name: cpanm --notest App::ReportPrereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\cpanm --verbose --notest App::ReportPrereqs
-
-      - name: report-prereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\report-prereqs
-        working-directory: ${{ github.event.repository.name }}
 
       - name: perl Makefile.PL
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
@@ -766,6 +762,15 @@ jobs:
         env:
           AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\cpanm --verbose --notest App::ReportPrereqs
+        if: always()
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\report-prereqs --meta MYMETA.json
+        working-directory: ${{ github.event.repository.name }}
+        if: always()
 
       - uses: actions/upload-artifact@v2
         with:
@@ -792,15 +797,6 @@ jobs:
               libperl-dev
               make
               wget
-          - distribution: 'openSUSE-Leap-15.2'
-            packages: >-
-              gcc
-              gcc-c++
-              git
-              make
-              perl-IO-Socket-SSL
-              perl-Net-SSLeay
-              which
           - distribution: 'Ubuntu-16.04'
             packages: >-
               g++
@@ -816,6 +812,13 @@ jobs:
               libnet-ssleay-perl
               make
           - distribution: 'Ubuntu-20.04'
+            packages: >-
+              g++
+              gcc
+              libio-socket-ssl-perl
+              libnet-ssleay-perl
+              make
+          - distribution: 'Ubuntu-22.04'
             packages: >-
               g++
               gcc
@@ -893,19 +896,11 @@ jobs:
 
       - name: cpanm --installdeps --notest .
         run: |
-          mv cpanfile .cpanfile.disabled
+          rm -f cpanfile
           ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
-          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
         env:
           AUTOMATED_TESTING: 1
-
-      - name: cpanm --notest App::ReportPrereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
-
-      - name: report-prereqs
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs
-        working-directory: ${{ github.event.repository.name }}
 
       - name: perl Makefile.PL
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
@@ -926,6 +921,15 @@ jobs:
         env:
           AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
+
+      - name: cpanm --notest App::ReportPrereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
+        if: always()
+
+      - name: report-prereqs
+        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/report-prereqs --meta MYMETA.json
+        working-directory: ${{ github.event.repository.name }}
+        if: always()
 
       - uses: actions/upload-artifact@v2
         with:

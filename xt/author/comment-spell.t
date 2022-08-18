@@ -1,10 +1,12 @@
 #!perl
 
-# Automatically generated file; DO NOT EDIT.
+# vim: ts=4 sts=4 sw=4 et: syntax=perl
 
 use 5.006;
 use strict;
 use warnings;
+
+# Automatically generated file; DO NOT EDIT.
 
 use Test::Spelling::Comment 0.005;
 use XT::Util;
@@ -24,5 +26,8 @@ Test::Spelling::Comment->new(
 )->add_stopwords( <DATA>, @{ __CONFIG__()->{stopwords} } )->all_files_ok;
 
 __DATA__
-LinkCheck
 cpanfile
+Kirmess
+LinkCheck
+Sven
+TORTIOUS

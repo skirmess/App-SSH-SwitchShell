@@ -2,6 +2,8 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - Switch license to the ISC license
+  - Use redefine() instead of mock() from Test::MockModule
   - Add a provides section to the META.* files
   - Added the -h option to specify the home directory
   - Removed minimal dependency on Test::TempDir::Tiny 0.017

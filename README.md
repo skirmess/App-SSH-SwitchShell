@@ -170,11 +170,3 @@ public review and contribution under the terms of the license.
 # AUTHOR
 
 Sven Kirmess <sven.kirmess@kzone.ch>
-
-# COPYRIGHT AND LICENSE
-
-This software is Copyright (c) 2017-2022 by Sven Kirmess.
-
-This is free software, licensed under:
-
-    The (two-clause) FreeBSD License
