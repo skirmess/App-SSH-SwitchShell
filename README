@@ -9,31 +9,31 @@ VERSION
 
 SYNOPSIS
 
-    sshss [-h <home>] [shell]
+    sshss [-h <home>] [-e VARIABLE[=value]]... [--env-command
+    VARIABLE[=value]]... [--env-login VARIABLE[=value]... [shell]
 
 DESCRIPTION
 
     sshss adds support to ease the pain of these dreadful shared accounts
     prevalent at some organizations. All you have to do is add sshss to the
     command string of the authorized_keys file. sshss lets you define a
-    different shell then the one defined in the passwd database for the
-    shared account and lets you define a different directory as your home
-    directory. You are most likely going to use a subdirectory of the
-    shared accounts home directory.
+    different shell then the one defined in the passwd database, configure
+    environment variables, and a different directory as your home
+    directory.
 
-    Both features, the personal home directory and the shell change, can be
-    used independently without using the other.
+    All features, the personal home directory, the environment variables,
+    and the shell change, can be used independently without using the
+    other.
 
-    If you specify a new shell the shell is not only used as the
-    interactive shell but also if you directly run a command. This includes
-    commands that run over SSH like scp(1) and rsync(1). It's your
-    responsibility to not use an overly obscure shell that breaks these
-    commands.
+    If you specify a new shell the shell is not only used as the login
+    shell but also if you directly run a command. This includes commands
+    that run over SSH like scp(1) and rsync(1). It's your responsibility to
+    not use an overly obscure shell that breaks these commands.
 
     The used shell must support the -c flag to run a command, which is used
     if you run a command directly over SSH, including scp(1) and rsync(1).
     This is the default used by SSH itself. If your shell would work with
-    plain SSH, it should also work with sshss.
+    plain SSH, it will also work with sshss.
 
     sshss tries to behave as much as possible like the do_child function
     from session.c from OpenSSH portable.
@@ -42,14 +42,38 @@ DESCRIPTION
 
 OPTIONS
 
-    home
+    -e VARIABLE[=value]
+
+      Sets the environment variable VARIABLE to value.
+
+      If value is an empty string, the environent variable is set to an
+      empty string.
+
+      If the = sign is ommited, the variable is deleted
+
+    --env-command VARIABLE[=value]
+
+      Same as -e but this variable is only set for non-login sessions.
+
+    --env-login VARIABLE[=value]
+
+      Same as -e but this variable is only set for login sessions.
+
+    -h home
 
       Specifies the directory to set as your home directory. sshss will set
       the HOME environment variable and change to this directory.
 
-      If this is not specified, and sshss is saved inside a .ssh directory
-      the parent of the .ssh directory is used as home directory. Otherwise
-      nothing is changed.
+      If the argument is a relative directory it is made absolute from the
+      current working directory, which is the default home directory of the
+      account you log in to.
+
+      If this is not specified, or if it is the same as the already
+      configured home directory, nothing is changed.
+
+      Note: Symlinks are resolved to compare the directory with the current
+      defined home directory, but they are not resolved when setting the
+      HOME variable.
 
     shell
 
@@ -78,12 +102,13 @@ EXAMPLES
  Example 1 Change the shell to ksh93 and use a custom home directory
 
     Create a directory to contain your own home directory. We create the
-    directory ~/.ryah in this example. Create a .ssh directory in your new
-    custom home directory and add the sshss script to this directory. Add
-    the following command string in front of your SSH key in the
-    ~/.ssh/authorized_keys file:
+    directory ~/.ryah in this example. Add the following command string in
+    front of your SSH key in the ~/.ssh/authorized_keys file:
 
-      command=".ryah/.ssh/sshss /usr/bin/ksh93"
+      command="/usr/bin/env perl .ryah/.ssh/sshss -h .ryah /usr/bin/ksh93"
+
+    Note: Adjust the path to sshss if you didn't put it in the .ssh
+    directory in your new home directory.
 
     When you login over SSH with your key to the admin account,
 
@@ -100,13 +125,15 @@ EXAMPLES
  Example 2 Change the shell to ksh93 without changing the home directory
 
     Add the sshss script to e.g. the ~/.ssh directory or any other
-    directory. sshss only changes the home directory if it is run from
-    inside a .ssh directory outside of the current home directory.
+    directory.
 
     Add the following command string in front of your SSH key in the
     ~/.ssh/authorized_keys file:
 
-      command=".ssh/sshss /usr/bin/ksh93"
+      command="/usr/bin/env perl .ssh/sshss /usr/bin/ksh93"
+
+    Note: Adjust the path to sshss if you didn't put it in the .ssh
+    directory.
 
     When you login over SSH with your key to the admin account,
 
@@ -117,12 +144,10 @@ EXAMPLES
  Example 3 Use a custom home directory
 
     Create a directory to contain your own home directory. We create the
-    directory ~/.ryah in this example. Create a .ssh directory in your new
-    custom home directory and add the sshss script to this directory. Add
-    the following command string in front of your SSH key in the
-    ~/.ssh/authorized_keys file:
+    directory ~/.ryah in this example. Add the following command string in
+    front of your SSH key in the ~/.ssh/authorized_keys file:
 
-      command=".ryah/.ssh/sshss"
+      command="/usr/bin/env perl .ryah/.ssh/sshss -h .ryah"
 
     When you login over SSH with your key to the admin account,
 
@@ -141,13 +166,73 @@ EXAMPLES
       * the working directory will be /home/admin/.ryah (The shared
       accounts home directory is /home/admin in this example)
 
+ Example 4 Use a custom bash profile
+
+    Create your own .bash_profile file and call it something like e.g.
+    .bash_profile.ryah. Then add the following at the top of the
+    .bash_profile file in the shared account.
+
+      if [[ $SSHSS_USER = 'ryah' ]]
+      then
+          . $HOME/.bash_profile.$SSHSS_USER
+          return
+      fi
+
+    Create your own .bashrc file and call it something like e.g. .bashrc.
+    Then add the following at the top of the .bashrc file in the shared
+    account.
+
+      if [[ $SSHSS_USER = 'ryah' ]]
+      then
+          . $HOME/.bashrc.$SSHSS_USER
+          return
+      fi
+
+    Then add the following command to your authorized_keys file:
+
+      command="/usr/bin/env perl sshss -e SSHSS_USER=ryah"
+
+    The .bash_profile file is executed when you log in to the system and
+    the .bashrc file is only run when you start another shell after logging
+    in. Most of the time the .bashrc file should be sourced from the
+    .bash_profile file.
+
+ Example 5 Use a custom ksh93 profile
+
+    Create your own .profile file and call it something like e.g.
+    .profile.ryah. Then add the following at the top of the .profile file
+    in the shared account.
+
+      if [[ $ENV =~ /.kshrc.ryah$ ]]
+      then
+          . $HOME/.profile.ryah
+          return
+      fi
+
+    Then add the following command to your authorized_keys file:
+
+      command="/usr/bin/env perl sshss -e ENV=$HOME/.kshrc.ryah"
+
+ Example 6 Configure your Git user
+
+    One of the many problems of shared accounts is that the Git author is
+    most likely configured for someone else, or for the sared account.
+
+    Then add the following command to your authorized_keys file to fix
+    this:
+
+      command="/usr/bin/env perl sshss -e GIT_AUTHOR_NAME='Sven Kirmess' -e GIT_AUTHOR_EMAIL='sven@example.com' -e GIT_COMMITTER_NAME='Sven Kirmess' -e GIT_COMMITTER_EMAIL='sven@example.com'"
+
+    These variables get precedence over whatever is configured in the
+    shared accounts .gitconfig.
+
 ENVIRONMENT
 
     HOME
 
-      If sshss is placed in an .ssh directory, the HOME environment
-      variable is set to the parent directory of this .ssh directory. Then,
-      the working directory is changed to this new home directory.
+      If the -h option is used the HOME environment variable is set to the
+      new home directory and the working directory is changed to this new
+      home directory.
 
       Otherwise the HOME environment variable is not used, nor is the
       working directory changed.

@@ -2,10 +2,14 @@ Revision history for App-SSH-SwitchShell
 
 {{$NEXT}}
 
+  - No longer change the home directory automagically based on where the
+    script is saved
+  - Added the -h option to specify the home directory
+  - Added the -e, --env-command, and --env-login arguments to set
+    environment variables
   - Switch license to the ISC license
   - Use redefine() instead of mock() from Test::MockModule
   - Add a provides section to the META.* files
-  - Added the -h option to specify the home directory
   - Removed minimal dependency on Test::TempDir::Tiny 0.017
   - skip needs $how_many with Test::More < 1.302013_009
   - Removed autodie in tests
